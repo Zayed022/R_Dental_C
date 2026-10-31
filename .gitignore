@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.tmp_uploads/
+.vercel/
+.DS_Store
+npm-debug.log*
+*.log
+.env.example
+CHANGELOG-V2-SKIN-HAIR.md
+DENTAL-LOGO-THEME-UPDATE.md
+OPERATIONS-V2-ADDITIONS.md
+WHATSAPP-BUSINESS-SETUP.md

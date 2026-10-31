@@ -1,0 +1,451 @@
+/*
+ * R Dental Clinic — logo-aligned Dental theme
+ * Scope: the public Dental experience only (.site-shell).
+ * Skin & Hair styling is intentionally untouched in skin.css.
+ */
+.site-shell {
+  --ink: #1e2e3e;
+  --ink-2: #344b5b;
+  --muted: #71838d;
+  --olive: #39a5a5;
+  --olive-dark: #237f82;
+  --cream: #f7fbfb;
+  --cream-2: #edf6f6;
+  --paper: #ffffff;
+  --line: #dce9ea;
+  --peach: #e4f2f2;
+  --shadow: 0 18px 45px rgba(30, 46, 62, 0.09);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+.site-shell ::selection {
+  background: #bfe5e3;
+  color: #152838;
+}
+
+.site-shell :is(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid rgba(45, 159, 158, 0.48);
+  outline-offset: 3px;
+}
+
+/* Header and navigation */
+.site-shell .topline {
+  background: #1e2e3e;
+  color: #e7f5f4;
+}
+.site-shell .topline a {
+  color: #ffffff;
+  text-decoration-color: #5bb8b5;
+}
+.site-shell .topline-divider {
+  background: rgba(232, 248, 247, 0.3);
+}
+.site-shell .site-header {
+  background: rgba(250, 253, 253, 0.94);
+  border-bottom-color: rgba(30, 46, 62, 0.1);
+}
+.site-shell .wordmark { color: #1e2e3e; }
+.site-shell .wordmark-symbol {
+  border-color: #70c4c0;
+  color: #238b8b;
+}
+.site-shell .wordmark-text small { color: #71838d; }
+.site-shell .main-nav a,
+.site-shell .header-whatsapp { color: #526a78; }
+.site-shell .main-nav a:hover,
+.site-shell .header-whatsapp:hover { color: #238b8b; }
+.site-shell .header-whatsapp { border-color: rgba(45, 159, 158, 0.2); }
+.site-shell .button-dark {
+  background: #1e2e3e;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(30, 46, 62, 0.12);
+}
+.site-shell .button-dark:hover { background: #2d5262; }
+.site-shell .button-light {
+  background: #e6f4f3;
+  color: #1e4655;
+}
+.site-shell .button-light:hover { background: #d3ecea; }
+.site-shell .button-outline {
+  border-color: #9ac9c9;
+  color: #245969;
+}
+.site-shell .button-outline:hover {
+  background: #e6f4f3;
+  border-color: #45a8a7;
+}
+.site-shell .mobile-menu { color: #1e2e3e; }
+
+/* Hero and visual identity */
+.site-shell .hero-section {
+  background: linear-gradient(128deg, #eaf6f6 0%, #f5fafa 52%, #e6f2f3 100%);
+}
+.site-shell .hero-orb-one { border-color: rgba(45, 159, 158, 0.2); }
+.site-shell .hero-orb-two { border-color: rgba(30, 46, 62, 0.12); }
+.site-shell .hero-kicker,
+.site-shell .eyebrow { color: #287f83; }
+.site-shell .kicker-dot,
+.site-shell .small-dot {
+  background: #35a4a2;
+  box-shadow: 0 0 0 4px rgba(53, 164, 162, 0.14);
+}
+.site-shell .hero-copy h1,
+.site-shell .section-heading h2,
+.site-shell .approach-copy h2,
+.site-shell .studio-top h2,
+.site-shell .reviews-intro h2,
+.site-shell .booking-copy h2,
+.site-shell .faq-intro h2,
+.site-shell .last-call-content h2 { color: #1e2e3e; }
+.site-shell .hero-copy h1 em,
+.site-shell .hero-serif,
+.site-shell .section-heading h2 em,
+.site-shell .approach-copy h2 em,
+.site-shell .studio-top h2 em,
+.site-shell .reviews-intro h2 em,
+.site-shell .booking-copy h2 em,
+.site-shell .faq-intro h2 em,
+.site-shell .last-call-content h2 em { color: #278f91; }
+.site-shell .hero-description,
+.site-shell .section-heading > p,
+.site-shell .approach-lead,
+.site-shell .studio-top > p,
+.site-shell .reviews-intro > p,
+.site-shell .booking-copy > p,
+.site-shell .faq-intro > p { color: #71838d; }
+.site-shell .text-link {
+  color: #245666;
+  border-bottom-color: #85c4c2;
+}
+.site-shell .text-link:hover { color: #208e90; }
+.site-shell .proof-avatars span {
+  border-color: #eaf6f6;
+  background: #258f91;
+  color: #ffffff;
+}
+.site-shell .proof-avatars span:nth-child(2) { background: #1e2e3e; }
+.site-shell .proof-avatars span:nth-child(3) { background: #6baeb0; }
+.site-shell .proof-stars { color: #2a9294; }
+.site-shell .proof-stars b { color: #344b5b; }
+.site-shell .hero-proof small { color: #778b94; }
+.site-shell .hero-image-frame {
+  background: #d5e8e8;
+  box-shadow: 0 24px 48px rgba(30, 46, 62, 0.14);
+}
+.site-shell .hero-image-shade {
+  background: linear-gradient(0deg, rgba(20, 42, 57, 0.42), transparent);
+}
+.site-shell .hero-image-label {
+  background: #ffffff;
+  border-color: rgba(30, 46, 62, 0.1);
+  box-shadow: 0 14px 40px rgba(30, 46, 62, 0.13);
+}
+.site-shell .label-symbol { background: #e1f2f1; color: #238b8b; }
+.site-shell .hero-image-label small { color: #71838d; }
+.site-shell .hero-round-stamp {
+  background: #d8eeee;
+  color: #245f69;
+  border-color: #a7d6d4;
+}
+.site-shell .hero-caption { color: #607986; }
+.site-shell .hero-bottomline {
+  border-top-color: rgba(30, 46, 62, 0.17);
+  color: #71838d;
+}
+.site-shell .bottomline-center span { background: #41a9a7; }
+
+/* Trust strip and treatment cards */
+.site-shell .values-strip {
+  background: #fbfefe;
+  border-top-color: #dce9ea;
+  border-bottom-color: #dce9ea;
+}
+.site-shell .values-grid > div { border-right-color: #e1eded; }
+.site-shell .value-icon {
+  border-color: #c9e4e3;
+  background: #eef8f7;
+  color: #258e90;
+}
+.site-shell .values-grid strong { color: #263d4c; }
+.site-shell .values-grid small { color: #81929a; }
+.site-shell .treatments-section,
+.site-shell .team-section,
+.site-shell .reviews-section,
+.site-shell .faq-section { background: #fbfdfd; }
+.site-shell .eyebrow-line { background: #43aaa8; }
+.site-shell .circle-link {
+  background: #e5f3f2;
+  color: #256c78;
+  border-color: #c9e5e4;
+}
+.site-shell .circle-link:hover { background: #d3ecea; }
+.site-shell .treatment-card {
+  background: #f3f9f9;
+  border-color: #dce9e9;
+}
+.site-shell .treatment-card:hover {
+  box-shadow: 0 14px 35px rgba(30, 46, 62, 0.1);
+  border-color: #b8dedd;
+}
+.site-shell .treatment-image-wrap { background: #dceaea; }
+.site-shell .card-arrow {
+  background: #ffffff;
+  color: #1e4655;
+}
+.site-shell .card-arrow:hover { background: #dff1f0; }
+.site-shell .treatment-meta,
+.site-shell .treatment-content > p,
+.site-shell .treatment-bottom > span { color: #778a93; }
+.site-shell .treatment-content h3,
+.site-shell .treatment-bottom b { color: #263d4c; }
+.site-shell .treatment-bottom { border-top-color: #dce9e9; }
+.site-shell .inline-link { color: #238b8b; }
+.site-shell .inline-link:hover { color: #1e596a; }
+.site-shell .treatment-footnote { color: #82939a; }
+.site-shell .treatment-footnote > span { color: #258e90; }
+
+/* Approach, clinicians and gallery */
+.site-shell .approach-section { background: #edf6f6; }
+.site-shell .approach-image-main { background: #d9e8e8; }
+.site-shell .approach-image-gradient {
+  background: linear-gradient(0deg, rgba(30, 46, 62, 0.38), transparent);
+}
+.site-shell .approach-note {
+  background: #ffffff;
+  box-shadow: 0 15px 40px rgba(30, 46, 62, 0.12);
+}
+.site-shell .approach-note-icon { background: #e2f2f1; color: #238b8b; }
+.site-shell .approach-note p { color: #2c4656; }
+.site-shell .approach-note small { color: #7e929a; }
+.site-shell .approach-side-stamp {
+  border-color: #8fcac8;
+  color: #287f83;
+  background: #e0f1f0;
+}
+.site-shell .approach-steps,
+.site-shell .approach-step { border-color: #d1e4e5; }
+.site-shell .approach-step > span { color: #39a2a1; }
+.site-shell .approach-step strong { color: #294453; }
+.site-shell .approach-step p { color: #748993; }
+.site-shell .doctor-image-wrap { background: #dce9e9; }
+.site-shell .doctor-index {
+  background: rgba(250, 253, 253, 0.93);
+  color: #287e83;
+}
+.site-shell .doctor-book { background: #dff1f0; color: #1e596a; }
+.site-shell .doctor-book:hover { background: #ffffff; }
+.site-shell .doctor-role { color: #3c9698; }
+.site-shell .doctor-info h3 { color: #263d4c; }
+.site-shell .doctor-info > p { color: #758892; }
+.site-shell .doctor-tags span,
+.site-shell .collection-tags span {
+  color: #267c81;
+  background: #e3f2f1;
+}
+.site-shell .team-footer-note {
+  border-top-color: #dce9e9;
+  color: #81929a;
+}
+.site-shell .studio-section { background: #eef6f6; }
+.site-shell .studio-top > p { color: #758993; }
+.site-shell .studio-photo { background: #dce8e8; }
+.site-shell .photo-caption {
+  background: rgba(250, 253, 253, 0.94);
+  color: #294a59;
+}
+.site-shell .studio-bottom { border-top-color: #d4e5e5; }
+.site-shell .studio-bottom > span { color: #62828b; }
+
+/* Video section: navy replaces the original dark green */
+.site-shell .video-section {
+  background: #1e2e3e;
+  color: #f1f8f8;
+}
+.site-shell .video-section:after {
+  border-color: rgba(145, 218, 214, 0.14);
+  box-shadow: 0 0 0 40px rgba(145, 218, 214, 0.025), 0 0 0 90px rgba(145, 218, 214, 0.025);
+}
+.site-shell .video-copy .eyebrow { color: #9ed8d5; }
+.site-shell .video-copy .eyebrow-line { background: #50b5b2; }
+.site-shell .video-copy h2 { color: #f2f8f8; }
+.site-shell .video-copy h2 em { color: #82ceca; }
+.site-shell .video-copy > p { color: #c0d2d8; }
+.site-shell .video-mini-note { color: #a9c0c8; }
+.site-shell .video-mini-dot {
+  background: #65c4bd;
+  box-shadow: 0 0 0 4px rgba(101, 196, 189, 0.12);
+}
+.site-shell .video-empty {
+  background: #294252;
+  border-color: rgba(220, 246, 245, 0.14);
+}
+.site-shell .video-empty-frame { background: #385565; }
+.site-shell .video-empty-play {
+  background: #e5f4f3;
+  color: #1e4655;
+  box-shadow: 0 0 0 13px rgba(229, 244, 243, 0.15);
+}
+.site-shell .video-empty-badge { background: rgba(20, 39, 54, 0.8); }
+.site-shell .video-empty-badge span { background: #65c4bd; }
+.site-shell .video-empty-caption { color: #f0f7f7; }
+.site-shell .video-empty-caption span { color: #c0d4da; }
+.site-shell .video-empty-caption > svg { color: #83d0cc; }
+.site-shell .video-poster { background: #385565; }
+.site-shell .video-play { background: #e8f5f4; color: #1e4655; }
+.site-shell .video-type { background: rgba(20, 39, 54, 0.76); color: #f2f8f8; }
+.site-shell .video-card-info p { color: #bfd0d5; }
+
+/* Reviews and booking */
+.site-shell .reviews-intro > p { color: #748993; }
+.site-shell .review-rating { border-top-color: #dce9ea; }
+.site-shell .review-rating > div,
+.site-shell .review-stars { color: #c19a50; }
+.site-shell .review-rating span,
+.site-shell .review-person small { color: #83939a; }
+.site-shell .review-card {
+  background: #eef7f6;
+  border-color: #dceaea;
+}
+.site-shell .review-card-1 { background: #e8f3f4; }
+.site-shell .review-card-2 { background: #f1f7f8; }
+.site-shell .review-card-top { color: #3b9b9b; }
+.site-shell .review-card > p { color: #314b5a; }
+.site-shell .review-person { border-top-color: rgba(38, 84, 96, 0.14); }
+.site-shell .review-avatar { background: #d4ecea; color: #277f82; }
+.site-shell .review-person strong { color: #304b59; }
+.site-shell .review-check { color: #2c9999; }
+.site-shell .review-disclaimer { color: #82939a; }
+.site-shell .booking-section { background: #e1f0f0; }
+.site-shell .booking-pattern {
+  border-color: rgba(42, 135, 139, 0.1);
+  box-shadow: 0 0 0 35px rgba(42, 135, 139, 0.025), 0 0 0 75px rgba(42, 135, 139, 0.025), 0 0 0 125px rgba(42, 135, 139, 0.025);
+}
+.site-shell .booking-copy > p { color: #637f88; }
+.site-shell .booking-contact-icon {
+  border-color: #acd6d5;
+  color: #268c8e;
+  background: rgba(255, 255, 255, 0.38);
+}
+.site-shell .booking-contact small { color: #718b92; }
+.site-shell .booking-contact a { color: #294958; }
+.site-shell .booking-hours {
+  border-top-color: #c6dfdf;
+  color: #607d86;
+}
+.site-shell .booking-form {
+  background: #ffffff;
+  border-color: #d6e8e8;
+  box-shadow: 0 17px 55px rgba(30, 62, 76, 0.11);
+  color: #294453;
+}
+.site-shell .booking-form-head { border-bottom-color: #e0eded; }
+.site-shell .form-step-badge { background: #e4f3f2; color: #267f83; }
+.site-shell .booking-form-head p { color: #81929a; }
+.site-shell .booking-form-head > svg { color: #45a4a3; }
+.site-shell .field > span { color: #49616d; }
+.site-shell .field > span b { color: #268f91; }
+.site-shell .field > span small { color: #93a1a5; }
+.site-shell .field input,
+.site-shell .field textarea,
+.site-shell .field select {
+  border-color: #d8e6e8;
+  background: #fbfefe;
+  color: #294453;
+}
+.site-shell .field input::placeholder,
+.site-shell .field textarea::placeholder { color: #a5b3b7; }
+.site-shell .field input:focus,
+.site-shell .field textarea:focus,
+.site-shell .field select:focus {
+  border-color: #5ab2b0;
+  box-shadow: 0 0 0 3px rgba(58, 164, 162, 0.13);
+}
+.site-shell .select-wrap > svg { color: #6f9299; }
+.site-shell .booking-form-footer { border-top-color: #e0eded; }
+.site-shell .booking-form-footer p { color: #8a9a9e; }
+.site-shell .booking-form-footer p svg { color: #3b9b9b; }
+.site-shell .booking-form-fineprint { color: #93a1a5; }
+.site-shell .success-symbol { background: #e1f2f0; color: #238b8b; }
+.site-shell .booking-success > p { color: #758a92; }
+.site-shell .success-summary { background: #f2f8f8; border-color: #dfebeb; }
+.site-shell .success-summary > div { border-bottom-color: #e1eded; }
+.site-shell .success-summary span { color: #82969c; }
+.site-shell .success-summary strong { color: #314b59; }
+
+/* FAQ, closing callout and footer */
+.site-shell .faq-intro > p { color: #758993; }
+.site-shell .faq-side-illustration { border-top-color: #dce9ea; }
+.site-shell .faq-illustration-circle {
+  border-color: #c9e3e2;
+  color: #2d9294;
+  background: #edf7f6;
+}
+.site-shell .faq-side-illustration strong { color: #3b5965; }
+.site-shell .faq-side-illustration span { color: #8b9ba0; }
+.site-shell .faq-list,
+.site-shell .faq-item { border-color: #dce8e9; }
+.site-shell .faq-question { color: #36515f; }
+.site-shell .faq-num { color: #41a2a2; }
+.site-shell .faq-toggle { background: #edf6f6; color: #318d90; }
+.site-shell .faq-open .faq-toggle { background: #dff0ef; }
+.site-shell .faq-answer p { color: #778b93; }
+.site-shell .last-call-section { background: #d5eceb; }
+.site-shell .last-call-symbol {
+  border-color: #9ecfcd;
+  color: #278d8f;
+  background: rgba(255, 255, 255, 0.55);
+}
+.site-shell .site-footer { background: #1e2e3e; color: #e8f1f2; }
+.site-shell .wordmark-light { color: #f1f8f8; }
+.site-shell .wordmark-light .wordmark-symbol { color: #9bdbd7; border-color: #4e8e95; }
+.site-shell .wordmark-light .wordmark-text small { color: #aac4ca; }
+.site-shell .footer-brand > p { color: #b1c4ca; }
+.site-shell .social-round { border-color: #476171; color: #dcebed; }
+.site-shell .social-round:hover { background: #2e5968; border-color: #66b8b5; }
+.site-shell .footer-col { color: #bfd0d5; }
+.site-shell .footer-col-title { color: #8bd0cc; }
+.site-shell .footer-col p { color: #e0eaeb; }
+.site-shell .footer-bottom {
+  border-top-color: rgba(232, 246, 247, 0.16);
+  color: #9fb4bb;
+}
+.site-shell .footer-bottom a { color: #c5e4e2; }
+.site-shell .floating-whatsapp {
+  background: #238b8b;
+  color: #ffffff;
+  box-shadow: 0 10px 35px rgba(27, 91, 97, 0.24);
+}
+.site-shell .floating-whatsapp:hover { background: #1d7075; }
+.site-shell .image-fallback {
+  color: #318e91;
+  background: linear-gradient(135deg, #e8f4f3, #d5e9e9);
+}
+.site-shell .lightbox { background: rgba(14, 29, 42, 0.93); }
+.site-shell .lightbox-close {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+.site-shell .lightbox-content { color: #f2f8f8; }
+.site-shell .lightbox-content p { color: #c4d4d8; }
+
+/* Department switch: make the alternate specialty easy to discover without
+   competing with the primary Dental booking action. */
+.site-shell .dental-department-switch {
+  border-color: #8fc9c7;
+  background: #eaf6f5;
+  color: #245c68;
+}
+.site-shell .dental-department-switch:hover {
+  background: #d9efed;
+  border-color: #49aaa8;
+}
+
+/* Small-screen header keeps the switch legible next to the booking CTA. */
+@media (max-width: 800px) {
+  .site-shell .dental-department-switch {
+    background: #eaf6f5;
+    border-color: #9acdcc;
+    color: #245c68;
+  }
+}
