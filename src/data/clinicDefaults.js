@@ -3,7 +3,7 @@ export const DEFAULT_SETTINGS = {
   heroTitle: 'A little more care. A lot more confidence.',
   heroDescription: 'Modern dentistry, thoughtful people, and a calmer experience — from your first hello to your healthiest smile.',
   heroImage: '/images/aurelia-hero.webp',
-  phone: '+91 98765 43210', whatsapp: '919876543210', email: 'hello@aurelia.dental', address: 'Add clinic address in Admin Settings', city: 'Your City, India',
+  phone: '+91 9284097779', whatsapp: '+91 9284097779', email: 'hello@aurelia.dental', address: 'Naigaon Road, Beside Ganesh Medical', city: 'Bhiwandis, India',
   openingTime: '09:00', closingTime: '18:00', hoursLabel: 'Monday – Saturday · 9:00 AM – 6:00 PM',
   aboutTitle: 'Care that starts with listening.', aboutDescription: 'We believe good dentistry is about more than a healthy smile. It is about feeling heard, understanding your options, and knowing you are in thoughtful hands.',
   googleReviewUrl: ''

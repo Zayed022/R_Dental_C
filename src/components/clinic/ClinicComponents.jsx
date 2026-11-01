@@ -3,15 +3,40 @@ import { motion } from 'framer-motion';
 import { Smile } from 'lucide-react';
 import { waNumber } from '../../api';
 
-export function Wordmark({ settings, light = false, homeHref = '/#top', subLabel = 'DENTAL STUDIO' }) {
-  return <a className={`wordmark ${light ? 'wordmark-light' : ''}`} href={homeHref} aria-label={`${settings.shortName || 'AURELIA'} homepage`}>
+export function Wordmark({ settings, light = false, homeHref = '/#top', subLabel = 'DENTAL CLINIC' }) {
+  return <a className={`wordmark ${light ? 'wordmark-light' : ''}`} href={homeHref} aria-label={`${settings.shortName || 'R'} homepage`}>
      <img
   src="/images/logo.png"
   alt="R Dental Clinic"
   className="navbar-logo"
 />
-    <span className="wordmark-text"><strong>{settings.shortName || 'AURELIA'}</strong><small>{subLabel}</small></span>
+    <span className="wordmark-text"><strong>{settings.shortName || 'R'}</strong><small>{subLabel}</small></span>
   </a>;
+}
+
+export default function SkinWordmark({
+  settings,
+  homeHref = "/skin-hair#skin-top",
+  subLabel = "SKIN & HAIR",
+}) {
+  return (
+    <a
+      href={homeHref}
+      className="skin-wordmark"
+      aria-label="Dr. Umaiya Siddiqui Skin and Laser Clinic"
+    >
+      <img
+        src="/images/logo2.png"
+        alt="Dr. Umaiya Siddiqui Skin and Laser Clinic"
+        className="skin-navbar-logo"
+      />
+
+      <span className="skin-wordmark-text">
+        <strong>{"Dr. Umaiya "}</strong>
+        <small>{"Skin and Laser"}</small>
+      </span>
+    </a>
+  );
 }
 export function Reveal({ children, className = '', delay = 0, ...props }) {
   return <motion.div className={className} initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }} {...props}>{children}</motion.div>;
