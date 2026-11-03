@@ -5631,3 +5631,1243 @@ select:focus-visible {
   .appointment-workflow-actions { flex-direction: column; }
   .appointment-workflow-actions .admin-button { width: 100%; }
 }
+
+/* ======================================================================
+   R DENTAL ADMIN WORKSPACE — NAVY / TEAL THEME
+   Scoped only to the admin workspace and admin login screen.
+   Public Dental and Skin & Hair pages are intentionally not affected.
+   Logo palette: navy #1E2E3E, teal #24807D, aqua #2DA8AE.
+====================================================================== */
+
+.admin-app {
+  --admin-navy: #1e2e3e;
+  --admin-navy-deep: #152536;
+  --admin-navy-soft: #2b4054;
+  --admin-teal: #24807d;
+  --admin-aqua: #2da8ae;
+  --admin-aqua-soft: #e8f5f6;
+  --admin-canvas: #f3f7fa;
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #f8fbfc;
+  --admin-border: #dce6ec;
+  --admin-text: #1e2e3e;
+  --admin-muted: #718392;
+  --admin-shadow: 0 10px 30px rgba(30, 46, 62, 0.055);
+  background: var(--admin-canvas);
+  color: var(--admin-text);
+}
+
+/* Main shell and sidebar */
+.admin-app .admin-sidebar {
+  width: 264px;
+  padding: 25px 16px 17px;
+  background: linear-gradient(180deg, #1e2e3e 0%, #17293a 100%);
+  color: #edf6fa;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 8px 0 30px rgba(17, 35, 51, 0.08);
+}
+
+.admin-app .admin-sidebar-top {
+  padding: 0 9px 25px;
+}
+
+.admin-app .admin-brand {
+  color: #f7fbfd;
+  gap: 11px;
+}
+
+.admin-app .admin-brand-logo {
+  width: 50px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.admin-app .admin-brand strong {
+  color: #ffffff;
+  letter-spacing: 0.18em;
+}
+
+.admin-app .admin-brand small {
+  color: #a9c2ce;
+}
+
+.admin-app .admin-clinic-card {
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(181, 216, 228, 0.17);
+  border-radius: 9px;
+  padding: 13px 12px;
+  margin-bottom: 23px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.admin-app .clinic-live-dot,
+.admin-app .admin-clock > span {
+  background: #55c2b8;
+  box-shadow: 0 0 0 4px rgba(85, 194, 184, 0.12);
+}
+
+.admin-app .admin-clinic-card strong {
+  color: #f2f8fb;
+  font-size: 10px;
+}
+
+.admin-app .admin-clinic-card small {
+  color: #a9c0cb;
+}
+
+.admin-app .admin-clinic-card > svg {
+  color: #91b2c0;
+}
+
+.admin-app .admin-nav {
+  gap: 6px;
+}
+
+.admin-app .admin-nav-item {
+  min-height: 44px;
+  height: auto;
+  padding: 0 13px;
+  gap: 12px;
+  border-radius: 8px;
+  color: #b4c7d1;
+  font-size: 11px;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-app .admin-nav-item svg {
+  color: #91afbd;
+  stroke-width: 1.85;
+}
+
+.admin-app .admin-nav-item:hover {
+  background: rgba(226, 244, 249, 0.09);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.admin-app .admin-nav-item:hover svg {
+  color: #75d0d0;
+}
+
+.admin-app .admin-nav-item.active {
+  position: relative;
+  background: #e8f4f7;
+  color: #1e3447;
+  font-weight: 750;
+  box-shadow: 0 5px 16px rgba(5, 20, 33, 0.12);
+}
+
+.admin-app .admin-nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 0 4px 4px 0;
+  background: var(--admin-aqua);
+}
+
+.admin-app .admin-nav-item.active svg {
+  color: var(--admin-teal);
+}
+
+.admin-app .nav-new-dot {
+  background: #55c2b8;
+}
+
+.admin-app .admin-back-to-site {
+  color: #b3c8d2;
+  border-top-color: rgba(219, 239, 246, 0.13);
+}
+
+.admin-app .admin-back-to-site:hover {
+  color: #ffffff;
+}
+
+.admin-app .admin-user {
+  border-top-color: rgba(219, 239, 246, 0.13);
+}
+
+.admin-app .admin-avatar {
+  background: #d9eef0;
+  color: #1e5060;
+}
+
+.admin-app .admin-user strong {
+  color: #f1f7fa;
+}
+
+.admin-app .admin-user small,
+.admin-app .admin-user button {
+  color: #a7bfca;
+}
+
+.admin-app .admin-user button:hover {
+  color: #ffffff;
+}
+
+.admin-app .admin-mobile-close {
+  color: #d1e2e9;
+}
+
+/* Main workspace surface and top navigation */
+.admin-app .admin-main {
+  margin-left: 264px;
+  width: calc(100% - 264px);
+  min-height: 100vh;
+  background: var(--admin-canvas);
+}
+
+.admin-app .admin-topbar {
+  min-height: 91px;
+  height: auto;
+  padding: 16px 36px;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid var(--admin-border);
+  box-shadow: 0 4px 18px rgba(30, 46, 62, 0.035);
+  backdrop-filter: blur(14px);
+}
+
+.admin-app .admin-breadcrumb {
+  color: #8194a1;
+  letter-spacing: 0.14em;
+}
+
+.admin-app .admin-topbar h1 {
+  color: var(--admin-navy);
+  font-size: 22px;
+  letter-spacing: -0.035em;
+}
+
+.admin-app .admin-topbar-actions {
+  gap: 15px;
+}
+
+.admin-app .admin-clock {
+  color: #647f8d;
+}
+
+.admin-app .admin-view-site {
+  background: #e7f3f5;
+  color: #1f5663;
+  padding: 11px 14px;
+  border: 1px solid #d1e7eb;
+  border-radius: 7px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.admin-app .admin-view-site:hover {
+  background: #d9eef1;
+  transform: translateY(-1px);
+}
+
+.admin-app .admin-content {
+  padding: 34px 36px 48px;
+  max-width: 1680px;
+}
+
+.admin-app .admin-page-intro {
+  margin-bottom: 30px;
+}
+
+.admin-app .admin-eyebrow {
+  color: #2b8588;
+  letter-spacing: 0.15em;
+}
+
+.admin-app .admin-page-intro h2 {
+  color: var(--admin-navy);
+  font-size: 27px;
+  letter-spacing: -0.04em;
+}
+
+.admin-app .admin-page-intro p {
+  color: #748896;
+  font-size: 11px;
+}
+
+/* Department switch */
+.admin-app .admin-department-toggle {
+  padding: 4px;
+  gap: 4px;
+  background: #f2f7f9;
+  border: 1px solid #d7e4e9;
+  border-radius: 9px;
+}
+
+.admin-app .admin-department-toggle button {
+  padding: 9px 12px;
+  color: #617888;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-app .admin-department-toggle button:hover {
+  color: var(--admin-navy);
+  background: #e8f2f5;
+}
+
+.admin-app .admin-department-toggle button.active {
+  color: #ffffff;
+  background: var(--admin-navy);
+  box-shadow: 0 3px 9px rgba(30, 46, 62, 0.18);
+}
+
+/* Buttons and icon controls */
+.admin-app .admin-button {
+  min-height: 39px;
+  padding: 0 15px;
+  border-radius: 7px;
+  font-size: 10px;
+  letter-spacing: 0.005em;
+}
+
+.admin-app .admin-button.primary {
+  background: var(--admin-navy);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(30, 46, 62, 0.12);
+}
+
+.admin-app .admin-button.primary:hover {
+  background: #2b4961;
+}
+
+.admin-app .admin-button.secondary {
+  background: #ffffff;
+  border-color: #d7e3e9;
+  color: #36566a;
+}
+
+.admin-app .admin-button.secondary:hover {
+  background: #edf6f8;
+  border-color: #bfdce3;
+  color: #1e5060;
+}
+
+/* Keep the WhatsApp action recognisably WhatsApp green. */
+.admin-app .admin-button.whatsapp-action {
+  background: #16845a;
+  color: #ffffff;
+}
+
+.admin-app .admin-button.whatsapp-action:hover {
+  background: #116f4b;
+}
+
+.admin-app .admin-icon-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  background: #ffffff;
+  border-color: #dce6eb;
+  color: #607b8a;
+}
+
+.admin-app .admin-icon-button:hover {
+  background: #eaf4f7;
+  color: #1e5363;
+  border-color: #c7e0e6;
+}
+
+.admin-app .admin-icon-button.danger:hover {
+  background: #fff0ed;
+  color: #b64c43;
+  border-color: #f0d0ca;
+}
+
+/* Dashboard cards and analytics */
+.admin-app .admin-stat-grid {
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-app .admin-stat-card {
+  min-height: 146px;
+  padding: 20px 19px 17px;
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: 11px;
+  box-shadow: var(--admin-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-app .admin-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 34px rgba(30, 46, 62, 0.08);
+}
+
+.admin-app .admin-stat-top {
+  color: #6e8290;
+}
+
+.admin-app .admin-stat-card > strong {
+  color: var(--admin-navy);
+}
+
+.admin-app .admin-stat-card > small {
+  color: #8395a0;
+}
+
+.admin-app .stat-icon.olive,
+.admin-app .stat-icon.blue {
+  background: #e5f1f5;
+  color: #315e78;
+}
+
+.admin-app .stat-icon.peach {
+  background: #e5f4f3;
+  color: #24807d;
+}
+
+.admin-app .stat-icon.lilac {
+  background: #e9edf5;
+  color: #4c6084;
+}
+
+.admin-app .stat-sparkline span {
+  background: #7fbfc2;
+}
+
+.admin-app .admin-panel,
+.admin-app .admin-stat-card,
+.admin-app .collection-card,
+.admin-app .admin-branch-card,
+.admin-app .admin-patient-card {
+  border-color: var(--admin-border);
+}
+
+.admin-app .admin-panel {
+  background: #ffffff;
+  border-radius: 11px;
+  box-shadow: var(--admin-shadow);
+  overflow: hidden;
+}
+
+.admin-app .admin-panel-head {
+  border-bottom-color: #e8eff3;
+  padding: 20px 21px 17px;
+}
+
+.admin-app .admin-panel-head h3,
+.admin-app .analytics-strip-head h3 {
+  color: var(--admin-navy);
+}
+
+.admin-app .admin-panel-head > svg {
+  color: var(--admin-teal);
+}
+
+.admin-app .admin-text-button {
+  color: var(--admin-teal);
+}
+
+.admin-app .admin-text-button:hover {
+  color: var(--admin-navy);
+}
+
+.admin-app .upcoming-item {
+  border-bottom-color: #edf2f5;
+}
+
+.admin-app .upcoming-date {
+  background: #e8f3f6;
+  color: #265a70;
+  border-radius: 7px;
+}
+
+.admin-app .upcoming-details strong {
+  color: var(--admin-navy);
+}
+
+.admin-app .quick-action {
+  border-color: #e8eff3;
+}
+
+.admin-app .quick-action:hover {
+  background: #f2f8fa;
+}
+
+.admin-app .quick-action-icon {
+  background: #e6f3f5;
+  color: var(--admin-teal);
+}
+
+.admin-app .analytics-strip {
+  background: #ffffff;
+}
+
+.admin-app .analytics-bar-track {
+  background: #e8f0f3;
+}
+
+.admin-app .analytics-bar-track i {
+  background: linear-gradient(180deg, #54b7b8, #247f83);
+}
+
+.admin-app .analytics-bar-value {
+  color: #3c6273;
+}
+
+.admin-app .admin-bottom-note {
+  color: #718695;
+}
+
+.admin-app .admin-bottom-note > svg {
+  color: var(--admin-teal);
+}
+
+/* Status and appointment tools retain clear semantic colours. */
+.admin-app .status-pill {
+  border-radius: 999px;
+}
+
+.admin-app .appointments-intro-stats {
+  color: #8294a0;
+}
+
+.admin-app .appointments-intro-stats b {
+  color: var(--admin-navy);
+}
+
+.admin-app .appointments-toolbar {
+  background: #ffffff;
+  border-bottom-color: #e5edf1;
+}
+
+.admin-app .admin-search {
+  height: 40px;
+  border-color: #d9e5eb;
+  border-radius: 8px;
+  background: #fbfdfe;
+  color: #78909d;
+}
+
+.admin-app .admin-search:focus-within {
+  border-color: #5aaeb3;
+  box-shadow: 0 0 0 3px rgba(45, 168, 174, 0.12);
+}
+
+.admin-app .admin-search input {
+  color: var(--admin-navy);
+}
+
+.admin-app .admin-search input::placeholder {
+  color: #9aabb5;
+}
+
+.admin-app .appointments-filters select,
+.admin-app .appointments-filters input[type="date"],
+.admin-app .appointment-detail-actions select,
+.admin-app .appointment-workflow-editor select,
+.admin-app .appointment-detail-status-field select {
+  border-color: #d8e4e9;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #365365;
+}
+
+.admin-app .appointments-filters select:focus,
+.admin-app .appointments-filters input[type="date"]:focus,
+.admin-app .appointment-detail-actions select:focus,
+.admin-app .appointment-workflow-editor select:focus,
+.admin-app .appointment-detail-status-field select:focus {
+  border-color: #4dabb0;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(45, 168, 174, 0.13);
+}
+
+.admin-app .admin-table th {
+  background: #f1f6f8;
+  color: #627d8c;
+  border-bottom-color: #dfe9ee;
+}
+
+.admin-app .admin-table td {
+  border-bottom-color: #eaf0f3;
+}
+
+.admin-app .admin-table tbody tr:hover {
+  background: #f5fafb;
+}
+
+.admin-app .admin-table tbody tr.selected-row {
+  background: #eaf4f7;
+}
+
+.admin-app .admin-table td > strong,
+.admin-app .patient-cell strong {
+  color: #294457;
+}
+
+.admin-app .admin-table td > small,
+.admin-app .table-subtext,
+.admin-app .patient-cell small {
+  color: #8397a2;
+}
+
+.admin-app .patient-avatar {
+  background: #e2f1f3;
+  color: #286e78;
+}
+
+.admin-app .whatsapp-mini {
+  border-color: #cde5d9;
+  background: #f0f8f3;
+  color: #18734f;
+  border-radius: 6px;
+}
+
+.admin-app .whatsapp-mini:hover {
+  background: #e2f2e8;
+}
+
+.admin-app .table-footer {
+  background: #f7fafb;
+  border-top-color: #e5edf1;
+  color: #8295a0;
+}
+
+.admin-app .appointment-detail-panel {
+  background: #ffffff;
+  border-color: var(--admin-border);
+  border-radius: 11px;
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-app .detail-panel-head h3 {
+  color: var(--admin-navy);
+}
+
+.admin-app .appointment-detail-grid {
+  background: #f4f8fa;
+  border-color: #e2ebef;
+  border-radius: 8px;
+}
+
+.admin-app .appointment-detail-grid > div span,
+.admin-app .patient-message-note > span {
+  color: #79909d;
+}
+
+.admin-app .appointment-detail-grid > div strong {
+  color: #2e4c60;
+}
+
+.admin-app .patient-message-note p,
+.admin-app .workflow-saving-note {
+  color: #718796;
+}
+
+.admin-app .appointment-stage-control {
+  background: #f0f7f9;
+  border-color: #dce9ee;
+  border-radius: 8px;
+}
+
+.admin-app .appointment-stage-control .field select {
+  border-color: #d8e4e9;
+  border-radius: 7px;
+  color: #365365;
+}
+
+.admin-app .appointment-detail-status-field > span {
+  color: #607b8b;
+}
+
+.admin-app .appointment-journey-note svg,
+.admin-app .appointment-history-dot {
+  color: var(--admin-teal);
+  background-color: var(--admin-aqua);
+}
+
+.admin-app .appointment-communication-history {
+  background: #fbfdfe;
+  border-color: #e0eaf0;
+  border-radius: 9px;
+}
+
+.admin-app .appointment-history-heading h4 {
+  color: var(--admin-navy);
+}
+
+.admin-app .appointment-communication-history li {
+  border-top-color: #eaf0f3;
+}
+
+.admin-app .appointment-communication-history li strong {
+  color: #35556a;
+}
+
+.admin-app .appointment-communication-history li small,
+.admin-app .appointment-communication-history li p,
+.admin-app .whatsapp-log-footnote {
+  color: #7f929e;
+}
+
+/* Content cards: doctors, services, reviews, media, branches and patients. */
+.admin-app .collection-toolbar {
+  gap: 14px;
+}
+
+.admin-app .collection-count {
+  color: #7b909d;
+}
+
+.admin-app .collection-card {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(30, 46, 62, 0.035);
+}
+
+.admin-app .collection-card:hover {
+  box-shadow: 0 13px 30px rgba(30, 46, 62, 0.085);
+}
+
+.admin-app .collection-card-top {
+  background: #edf5f7;
+}
+
+.admin-app .collection-default-icon {
+  background: #deedf1;
+  color: #4d8793;
+}
+
+.admin-app .collection-eyebrow {
+  color: var(--admin-teal);
+}
+
+.admin-app .collection-card h3,
+.admin-app .admin-branch-title h3,
+.admin-app .admin-patient-main h3 {
+  color: #243d50;
+}
+
+.admin-app .collection-card-body > p,
+.admin-app .admin-branch-content > p {
+  color: #718695;
+}
+
+.admin-app .collection-meta {
+  border-top-color: #eaf0f3;
+  color: #7e919c;
+}
+
+.admin-app .admin-branch-card,
+.admin-app .admin-patient-card {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-app .admin-branch-image {
+  background: #eaf3f6;
+}
+
+.admin-app .admin-branch-image > div:first-child:not(.admin-branch-actions) {
+  color: #367f8b;
+  background: linear-gradient(145deg, #e8f4f7, #d9ebf0);
+}
+
+.admin-app .admin-branch-detail svg,
+.admin-app .admin-branch-metrics svg {
+  color: var(--admin-teal);
+}
+
+.admin-app .admin-branch-metrics {
+  border-top-color: #e5edf1;
+}
+
+.admin-app .admin-branch-tags span,
+.admin-app .patient-source-badge {
+  background: #eaf4f6;
+  color: #3a7080;
+  border-radius: 4px;
+}
+
+.admin-app .admin-patient-stats {
+  border-top-color: #e6eef2;
+  border-bottom-color: #e6eef2;
+}
+
+.admin-app .admin-patient-stats span,
+.admin-app .admin-patient-visits > p,
+.admin-app .admin-patient-visit {
+  color: #718694;
+}
+
+.admin-app .admin-patient-stats strong,
+.admin-app .admin-patient-visits > strong {
+  color: #29475b;
+}
+
+.admin-app .admin-patient-notes {
+  background: #f1f7f9;
+  color: #5f7786;
+  border-radius: 6px;
+}
+
+.admin-app .admin-patient-visit {
+  border-top-color: #eaf0f3;
+}
+
+.admin-app .admin-form-note svg {
+  color: var(--admin-teal);
+}
+
+.admin-app .doctor-alert-enabled {
+  background: #e6f3f1;
+  color: #23746f;
+  border-radius: 4px;
+}
+
+.admin-app .whatsapp-cloud-status {
+  border-color: #d8e8eb;
+  background: #f3f9fa;
+  border-radius: 8px;
+}
+
+.admin-app .whatsapp-cloud-status strong {
+  color: #2a4b5d;
+}
+
+.admin-app .branch-services-summary,
+.admin-app .booking-whatsapp-status {
+  border-color: #d9eaee;
+  background: #f0f8fa;
+}
+
+.admin-app .branch-services-summary {
+  border-left-color: var(--admin-aqua);
+}
+
+/* Forms and settings */
+.admin-app .field > span {
+  color: #496477;
+}
+
+.admin-app .field input,
+.admin-app .field textarea,
+.admin-app .field select,
+.admin-app .admin-edit-grid .field input,
+.admin-app .admin-edit-grid .field select,
+.admin-app .admin-edit-grid .field textarea,
+.admin-app .settings-field-grid .field input,
+.admin-app .settings-field-grid .field textarea {
+  border-color: #d8e4e9;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #263f52;
+}
+
+.admin-app .field input:focus,
+.admin-app .field textarea:focus,
+.admin-app .field select:focus,
+.admin-app .admin-edit-grid .field input:focus,
+.admin-app .admin-edit-grid .field select:focus,
+.admin-app .admin-edit-grid .field textarea:focus,
+.admin-app .settings-field-grid .field input:focus,
+.admin-app .settings-field-grid .field textarea:focus {
+  outline: 0;
+  border-color: #4aabb0;
+  box-shadow: 0 0 0 3px rgba(45, 168, 174, 0.12);
+}
+
+.admin-app .field input::placeholder,
+.admin-app .field textarea::placeholder {
+  color: #9aabb5;
+}
+
+.admin-app .field-checkbox {
+  background: #f4f8fa;
+  border-color: #dfe9ee;
+  border-radius: 7px;
+}
+
+.admin-app .field-checkbox input {
+  accent-color: var(--admin-teal);
+}
+
+.admin-app .settings-group {
+  background: #ffffff;
+  border-color: #dfe9ee;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(30, 46, 62, 0.035);
+}
+
+.admin-app .settings-group-head {
+  border-bottom-color: #e8eff3;
+}
+
+.admin-app .settings-group-index {
+  background: #e8f3f6;
+  color: #2c7180;
+}
+
+.admin-app .settings-group-head h3 {
+  color: #29475b;
+}
+
+.admin-app .settings-group-head p,
+.admin-app .settings-save-note,
+.admin-app .settings-bottom-actions > span {
+  color: #748a98;
+}
+
+.admin-app .settings-whatsapp-preview {
+  background: #f1f8fa;
+  border-color: #dbe9ee;
+  border-radius: 8px;
+}
+
+.admin-app .settings-whatsapp-preview strong {
+  color: #2f5266;
+}
+
+.admin-app .settings-bottom-actions > span svg {
+  color: var(--admin-teal);
+}
+
+/* Media manager */
+.admin-app .media-dropzone {
+  border-color: #9dcbd2;
+  border-radius: 9px;
+  background: #f1f8fa;
+}
+
+.admin-app .media-dropzone:hover {
+  background: #e9f5f7;
+  border-color: #4daab0;
+}
+
+.admin-app .media-upload-icon {
+  background: #e0f0f3;
+  color: #347e8c;
+}
+
+.admin-app .media-tips-panel {
+  background: #f4f8fa;
+  border-color: #dfe9ee;
+  border-radius: 9px;
+}
+
+.admin-app .media-tip > span {
+  background: #e2f0f3;
+  color: #327a88;
+}
+
+.admin-app .media-admin-card {
+  border-color: #dce7ed;
+  border-radius: 9px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.admin-app .media-kind-badge {
+  background: rgba(30, 46, 62, 0.88);
+  color: #ffffff;
+}
+
+.admin-app .media-admin-card-body h4 {
+  color: #29475b;
+}
+
+.admin-app .media-admin-card-body > p {
+  color: #778c99;
+}
+
+/* Modals, errors, empty states and notifications */
+.admin-app .admin-modal-backdrop {
+  background: rgba(17, 34, 49, 0.62);
+}
+
+.admin-app .admin-modal {
+  background: #ffffff;
+  border: 1px solid #dbe6ec;
+  border-radius: 13px;
+  box-shadow: 0 28px 80px rgba(15, 31, 46, 0.27);
+  overflow: auto;
+}
+
+.admin-app .admin-modal-head {
+  background: #fbfdfe;
+  border-bottom-color: #e5edf1;
+}
+
+.admin-app .admin-modal-head h3 {
+  color: var(--admin-navy);
+}
+
+.admin-app .admin-modal-head p {
+  color: #748a97;
+}
+
+.admin-app .admin-modal-footer {
+  border-top-color: #e5edf1;
+}
+
+.admin-app .admin-empty {
+  background: #ffffff;
+  border: 1px dashed #cddde5;
+  border-radius: 10px;
+}
+
+.admin-app .admin-empty-icon {
+  background: #e8f3f6;
+  color: #347d8c;
+}
+
+.admin-app .admin-empty h3,
+.admin-app .admin-error-panel h3 {
+  color: var(--admin-navy);
+}
+
+.admin-app .admin-empty p,
+.admin-app .admin-error-panel p,
+.admin-app .admin-error-panel span {
+  color: #718694;
+}
+
+.admin-app .admin-error-panel {
+  background: #fff8f7;
+  border-color: #f0d9d4;
+  border-radius: 9px;
+}
+
+.admin-app .admin-error-panel > svg {
+  color: #b45d53;
+}
+
+.admin-app .admin-toast {
+  background: var(--admin-navy);
+  color: #f5fbfd;
+  border: 1px solid rgba(120, 197, 201, 0.25);
+  border-radius: 9px;
+  box-shadow: 0 14px 35px rgba(19, 37, 53, 0.24);
+}
+
+.admin-app .admin-section-loading,
+.admin-app .admin-loading {
+  color: #567181;
+}
+
+.admin-app .admin-section-loading svg,
+.admin-app .admin-loading svg {
+  color: var(--admin-teal);
+}
+
+.admin-app .admin-mobile-menu {
+  color: #31596e;
+}
+
+.admin-app .admin-sidebar-overlay {
+  background: rgba(14, 29, 43, 0.55);
+}
+
+/* Standalone authentication/loading states use the same palette. */
+.admin-loading {
+  color: #567181;
+}
+
+.admin-loading svg {
+  color: #24807d;
+}
+
+/* Login screen uses the same clinic navy and teal identity. */
+.admin-login-page {
+  --admin-navy: #1e2e3e;
+  --admin-navy-deep: #152536;
+  --admin-teal: #24807d;
+  --admin-aqua: #2da8ae;
+  background: #f3f7fa;
+  color: #1e2e3e;
+}
+
+.admin-login-page .login-side-visual {
+  background-color: #1e2e3e;
+}
+
+.admin-login-page .login-visual-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 37, 54, 0.30),
+    rgba(18, 37, 54, 0.88)
+  );
+}
+
+.admin-login-page .login-eyebrow {
+  color: #a9e1df;
+}
+
+.admin-login-page .login-eyebrow > span {
+  background: #50b9b6;
+}
+
+.admin-login-page .login-visual-copy h2 em {
+  color: #8ed8d6;
+}
+
+.admin-login-page .login-visual-copy p {
+  color: #d0e0e7;
+}
+
+.admin-login-page .login-visual-bottom {
+  color: #a9c1cd;
+}
+
+.admin-login-page .login-form-side {
+  background: #f8fbfc;
+}
+
+.admin-login-page .login-brand {
+  color: var(--admin-navy);
+}
+
+.admin-login-page .login-brand small {
+  color: #6d8795;
+}
+
+.admin-login-page .login-form .eyebrow {
+  color: var(--admin-teal);
+}
+
+.admin-login-page .login-form h1 {
+  color: var(--admin-navy);
+}
+
+.admin-login-page .login-form > p {
+  color: #748a98;
+}
+
+.admin-login-page .login-form .field > span {
+  color: #456276;
+}
+
+.admin-login-page .login-form .field input {
+  border-color: #d7e4ea;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #20394d;
+}
+
+.admin-login-page .login-form .field input:focus {
+  outline: 0;
+  border-color: #4aaab0;
+  box-shadow: 0 0 0 3px rgba(45, 168, 174, 0.13);
+}
+
+.admin-login-page .password-input button {
+  color: #668594;
+}
+
+.admin-login-page .login-submit {
+  border-radius: 7px;
+  background: var(--admin-navy);
+  color: #ffffff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.admin-login-page .login-submit:hover {
+  background: #2b4961;
+  transform: translateY(-1px);
+}
+
+.admin-login-page .login-secure-note {
+  color: #718b98;
+}
+
+.admin-login-page .login-secure-note svg {
+  color: var(--admin-teal);
+}
+
+.admin-login-page .login-footer {
+  border-top-color: #dce7ed;
+  color: #8296a1;
+}
+
+/* Shared admin focus treatment and responsive refinements. */
+.admin-app :is(button, a, input, textarea, select):focus-visible,
+.admin-login-page :is(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid rgba(45, 168, 174, 0.28);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1120px) {
+  .admin-app .admin-sidebar {
+    width: 230px;
+  }
+  .admin-app .admin-main {
+    margin-left: 230px;
+    width: calc(100% - 230px);
+  }
+  .admin-app .admin-content {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .admin-app .admin-topbar {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+
+@media (max-width: 860px) {
+  .admin-app .admin-sidebar {
+    width: 215px;
+  }
+  .admin-app .admin-main {
+    margin-left: 215px;
+    width: calc(100% - 215px);
+  }
+  .admin-app .admin-topbar {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .admin-app .admin-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-app .admin-sidebar {
+    width: min(286px, 86vw);
+  }
+  .admin-app .admin-main {
+    margin-left: 0;
+    width: 100%;
+  }
+  .admin-app .admin-topbar {
+    min-height: 74px;
+    padding: 10px 15px;
+  }
+  .admin-app .admin-topbar h1 {
+    font-size: 17px;
+  }
+  .admin-app .admin-content {
+    padding: 21px 14px 34px;
+  }
+  .admin-app .admin-stat-card {
+    border-radius: 9px;
+  }
+  .admin-app .admin-panel,
+  .admin-app .collection-card,
+  .admin-app .admin-branch-card,
+  .admin-app .admin-patient-card {
+    border-radius: 9px;
+  }
+  .admin-login-page {
+    grid-template-columns: 1fr;
+  }
+  .admin-login-page .login-side-visual {
+    display: none;
+  }
+  .admin-login-page .login-form-side {
+    min-height: 100vh;
+    padding: 25px 22px;
+  }
+  .admin-login-page .login-form {
+    padding: 38px 0;
+  }
+}
