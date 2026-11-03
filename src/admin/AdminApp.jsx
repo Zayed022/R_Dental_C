@@ -17,20 +17,21 @@ import { AdminMedia } from './AdminMedia';
 import { AdminSettings } from './AdminSettings';
 import { AdminBranches } from './AdminBranches';
 import { AdminPatients } from './AdminPatients';
+import { AdminGoogleReviews } from './AdminGoogleReviews';
 
 const adminTabs = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard }, { id: 'appointments', label: 'Appointments', icon: CalendarCheck },
   { id: 'patients', label: 'Patients', icon: UserPlus }, { id: 'branches', label: 'Branches', icon: MapPin },
   { id: 'doctors', label: 'Dentists', icon: Users }, { id: 'services', label: 'Treatments', icon: BriefcaseMedical },
   { id: 'media', label: 'Gallery & videos', icon: Images }, { id: 'faqs', label: 'FAQs', icon: CircleHelp },
-  { id: 'reviews', label: 'Reviews', icon: Quote }, { id: 'settings', label: 'Clinic settings', icon: SettingsIcon }
+  { id: 'reviews', label: 'Reviews', icon: Quote }, { id: 'google-reviews', label: 'Google Reviews', icon: Star }, { id: 'settings', label: 'Clinic settings', icon: SettingsIcon }
 ];
 export function AdminApp() {
   const [admin, setAdmin] = useState(null);
   const [department, setDepartment] = useState('dental');
   setApiDepartment(department);
   const [authChecked, setAuthChecked] = useState(false);
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useState(() => new URLSearchParams(window.location.search).get('tab') === 'google-reviews' ? 'google-reviews' : 'overview');
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,6 +58,7 @@ export function AdminApp() {
         {tab === 'media' && <AdminMedia refreshKey={refreshKey} notify={notice} department={department}/>}
         {tab === 'faqs' && <AdminCollection kind="faqs" refreshKey={refreshKey} notify={notice} department={department}/>}
         {tab === 'reviews' && <AdminCollection kind="reviews" refreshKey={refreshKey} notify={notice} department={department}/>}
+        {tab === 'google-reviews' && <AdminGoogleReviews refreshKey={refreshKey} notify={notice} department={department}/>}
         {tab === 'settings' && <AdminSettings refreshKey={refreshKey} notify={notice} department={department}/>}
       </motion.div></AnimatePresence></div>
     </main>{toast && <div className="admin-toast"><CheckCircle2 size={17}/>{toast}</div>}

@@ -172,14 +172,44 @@ faqSchema.index({ department: 1, active: 1, sortOrder: 1 });
 
 const reviewSchema = new Schema({
   department: { type: String, enum: ['dental', 'skin'], default: 'dental', index: true },
+  source: { type: String, enum: ['manual', 'website', 'google'], default: 'manual', index: true },
+  googleReviewId: { type: String, default: undefined, maxlength: 200 },
+  googleReviewResource: { type: String, default: '', maxlength: 500 },
   patientName: { type: String, required: true, trim: true, maxlength: 120 },
-  quote: { type: String, required: true, trim: true, maxlength: 800 },
+  reviewerPhotoUrl: { type: String, default: '', maxlength: 1000 },
+  quote: { type: String, default: '', maxlength: 12000 },
   treatmentLabel: { type: String, default: 'Patient experience', maxlength: 120 },
   rating: { type: Number, min: 1, max: 5, default: 5 },
+  reviewDate: { type: Date, default: null },
+  ownerReply: { type: String, default: '', maxlength: 12000 },
+  ownerReplyDate: { type: Date, default: null },
+  googleProfileUrl: { type: String, default: '', maxlength: 1000 },
+  lastGoogleSyncAt: { type: Date, default: null },
+  patientConsented: { type: Boolean, default: false },
+  consentedAt: { type: Date, default: null },
   published: { type: Boolean, default: true },
   sortOrder: { type: Number, default: 0 }
 }, { timestamps: true, versionKey: false });
-reviewSchema.index({ department: 1, published: 1, sortOrder: 1 });
+reviewSchema.index({ department: 1, published: 1, reviewDate: -1, createdAt: -1 });
+reviewSchema.index({ department: 1, googleReviewId: 1 }, { unique: true, partialFilterExpression: { googleReviewId: { $type: 'string' } } });
+// Google Business Profile API content is retained only as a short-lived cache.
+// Non-Google reviews have a null lastGoogleSyncAt and are not removed by this TTL index.
+reviewSchema.index({ lastGoogleSyncAt: 1 }, { expireAfterSeconds: 28 * 24 * 60 * 60 });
+
+const googleBusinessConnectionSchema = new Schema({
+  department: { type: String, enum: ['dental', 'skin'], default: 'dental', unique: true },
+  accountName: { type: String, default: '', maxlength: 160 },
+  accountTitle: { type: String, default: '', maxlength: 180 },
+  locationName: { type: String, default: '', maxlength: 180 },
+  locationTitle: { type: String, default: '', maxlength: 180 },
+  refreshTokenEncrypted: { type: String, default: '' },
+  connectedBy: { type: String, default: '', maxlength: 180 },
+  connectedAt: { type: Date, default: null },
+  lastSyncedAt: { type: Date, default: null },
+  averageRating: { type: Number, min: 0, max: 5, default: 0 },
+  totalReviewCount: { type: Number, min: 0, default: 0 },
+  lastSyncError: { type: String, default: '', maxlength: 1000 }
+}, { timestamps: true, versionKey: false });
 
 const settingsSchema = new Schema({
   key: { type: String, default: 'main', unique: true },
@@ -242,5 +272,6 @@ export const WhatsAppLog = model('WhatsAppLog', whatsappLogSchema);
 export const Media = model('Media', mediaSchema);
 export const Faq = model('Faq', faqSchema);
 export const Review = model('Review', reviewSchema);
+export const GoogleBusinessConnection = model('GoogleBusinessConnection', googleBusinessConnectionSchema);
 export const ClinicSettings = model('ClinicSettings', settingsSchema);
 export const Admin = model('Admin', adminSchema);

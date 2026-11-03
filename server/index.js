@@ -12,7 +12,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { Admin, Appointment, Branch, ClinicSettings, Doctor, Faq, Media, Patient, Review, Treatment, WhatsAppLog } from './models.js';
+import { Admin, Appointment, Branch, ClinicSettings, Doctor, Faq, GoogleBusinessConnection, Media, Patient, Review, Treatment, WhatsAppLog } from './models.js';
+import { buildGoogleAuthorizationUrl, encryptGoogleRefreshToken, exchangeGoogleAuthorizationCode, listGoogleAccounts, listGoogleLocations, syncGoogleReviews, revokeGoogleAuthorization, expireStaleGoogleReviewCache } from './googleBusinessProfile.js';
 import { seedDatabase } from './seed.js';
 
 const { GridFSBucket, ObjectId } = mongoose.mongo;
@@ -56,6 +57,7 @@ app.use(cookieParser());
 const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 const authLimiter = rateLimit({ ...rateOptions, limit: 8, message: { error: 'Too many login attempts. Please try again in 15 minutes.' } });
 const bookingLimiter = rateLimit({ ...rateOptions, limit: 20, message: { error: 'Too many requests. Please wait and try again.' } });
+const reviewLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 8, standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many review submissions. Please try again later.' } });
 const generalLimiter = rateLimit({ ...rateOptions, limit: 300 });
 app.use('/api', generalLimiter);
 
@@ -349,7 +351,59 @@ app.get('/api/branches', asyncHandler(async (req, res) => {
 }));
 app.get('/api/services', asyncHandler(async (req, res) => { const rows = await Treatment.find(departmentFilter(getDepartment(req.query.department), { active: true })).sort({ featured: -1, sortOrder: 1, name: 1 }).lean(); res.json(rows); }));
 app.get('/api/faqs', asyncHandler(async (req, res) => { res.json(await Faq.find(departmentFilter(getDepartment(req.query.department), { active: true })).sort({ sortOrder: 1, createdAt: 1 }).lean()); }));
-app.get('/api/reviews', asyncHandler(async (req, res) => { res.json(await Review.find(departmentFilter(getDepartment(req.query.department), { published: true })).sort({ sortOrder: 1, createdAt: -1 }).limit(12).lean()); }));
+app.get('/api/reviews', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  const googleCacheCutoff = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000);
+  const freshContentFilter = {
+    $or: [
+      { source: { $ne: 'google' } },
+      { lastGoogleSyncAt: { $gte: googleCacheCutoff } }
+    ]
+  };
+  const rows = await Review.find(departmentFilter(department, {
+    $and: [{ published: true }, freshContentFilter]
+  }))
+    .sort({ reviewDate: -1, createdAt: -1, sortOrder: 1 })
+    .limit(250)
+    .lean();
+  res.json(rows);
+}));
+app.get('/api/reviews/summary', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  if (department === 'dental') await expireStaleGoogleReviewCache();
+  const connection = department === 'dental'
+    ? await GoogleBusinessConnection.findOne({ department: 'dental' }).select('averageRating totalReviewCount lastSyncedAt locationTitle').lean()
+    : null;
+  const result = connection || { averageRating: 0, totalReviewCount: 0, lastSyncedAt: null, locationTitle: '' };
+  const summaryIsFresh = result.lastSyncedAt && new Date(result.lastSyncedAt).getTime() >= Date.now() - 28 * 24 * 60 * 60 * 1000;
+  res.json({
+    averageRating: summaryIsFresh ? Number(result.averageRating || 0) : 0,
+    totalReviewCount: summaryIsFresh ? Number(result.totalReviewCount || 0) : 0,
+    lastSyncedAt: summaryIsFresh ? result.lastSyncedAt : null,
+    locationTitle: summaryIsFresh ? (result.locationTitle || '') : ''
+  });
+}));
+app.post('/api/reviews', reviewLimiter, asyncHandler(async (req, res) => {
+  // Honeypot field: return a successful-looking response without storing bot submissions.
+  if (safeText(req.body.websiteUrl, 200)) return res.status(201).json({ ok: true, message: 'Thank you. Your review has been submitted for moderation.' });
+  const patientName = validateRequired(req.body.patientName, 'Display name', 80);
+  const quote = validateRequired(req.body.quote, 'Review', 2000);
+  const rating = Number(req.body.rating || 5);
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) return res.status(400).json({ error: 'Choose a rating between 1 and 5.' });
+  if (req.body.consent !== true) return res.status(400).json({ error: 'Please confirm that you agree to display your review on the clinic website.' });
+  const review = await Review.create({
+    department: getDepartment(req.body.department || req.query.department),
+    source: 'website',
+    patientName,
+    quote,
+    rating,
+    treatmentLabel: 'Patient experience',
+    patientConsented: true,
+    consentedAt: new Date(),
+    published: false
+  });
+  res.status(201).json({ ok: true, message: 'Thank you. Your review has been submitted and will appear after the clinic team approves it.', reviewId: review._id });
+}));
 app.get('/api/media', asyncHandler(async (req, res) => {
   const q = { active: true };
   if (['image', 'video'].includes(req.query.type)) q.type = req.query.type;
@@ -857,10 +911,62 @@ adminApi.post('/faqs', asyncHandler(async (req, res) => { const question = valid
 adminApi.patch('/faqs/:id', asyncHandler(async (req, res) => { if (!isObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid FAQ.' }); const update = {}; if (req.body.question !== undefined) update.question = validateRequired(req.body.question, 'Question', 240); if (req.body.answer !== undefined) update.answer = validateRequired(req.body.answer, 'Answer', 1800); if (req.body.active !== undefined) update.active = Boolean(req.body.active); if (req.body.sortOrder !== undefined) update.sortOrder = Number(req.body.sortOrder || 0); const row = await Faq.findOneAndUpdate(departmentFilter(getDepartment(req.query.department), { _id: req.params.id }), update, { new: true, runValidators: true }); if (!row) return res.status(404).json({ error: 'FAQ not found.' }); res.json(row); }));
 adminApi.delete('/faqs/:id', asyncHandler(async (req, res) => { const row = await Faq.findOneAndDelete(departmentFilter(getDepartment(req.query.department), { _id: req.params.id })); if (!row) return res.status(404).json({ error: 'FAQ not found.' }); res.json({ ok: true }); }));
 
-adminApi.get('/reviews', asyncHandler(async (req, res) => res.json(await Review.find(departmentFilter(getDepartment(req.query.department))).sort({ sortOrder: 1, createdAt: -1 }).lean())));
-adminApi.post('/reviews', asyncHandler(async (req, res) => { const patientName = validateRequired(req.body.patientName, 'Patient name', 120); const quote = validateRequired(req.body.quote, 'Review', 800); res.status(201).json(await Review.create({ department: getDepartment(req.query.department), patientName, quote, treatmentLabel: safeText(req.body.treatmentLabel, 120), rating: Math.max(1, Math.min(5, Number(req.body.rating || 5))), published: req.body.published !== false, sortOrder: Number(req.body.sortOrder || 0) })); }));
-adminApi.patch('/reviews/:id', asyncHandler(async (req, res) => { if (!isObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid review.' }); const update = {}; for (const key of ['patientName', 'quote', 'treatmentLabel']) if (req.body[key] !== undefined) update[key] = safeText(req.body[key], key === 'quote' ? 800 : 180); if (req.body.rating !== undefined) update.rating = Math.max(1, Math.min(5, Number(req.body.rating))); if (req.body.published !== undefined) update.published = Boolean(req.body.published); if (req.body.sortOrder !== undefined) update.sortOrder = Number(req.body.sortOrder || 0); const row = await Review.findOneAndUpdate(departmentFilter(getDepartment(req.query.department), { _id: req.params.id }), update, { new: true, runValidators: true }); if (!row) return res.status(404).json({ error: 'Review not found.' }); res.json(row); }));
-adminApi.delete('/reviews/:id', asyncHandler(async (req, res) => { const row = await Review.findOneAndDelete(departmentFilter(getDepartment(req.query.department), { _id: req.params.id })); if (!row) return res.status(404).json({ error: 'Review not found.' }); res.json({ ok: true }); }));
+adminApi.get('/reviews', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  if (department === 'dental') await expireStaleGoogleReviewCache();
+  const cutoff = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000);
+  res.json(await Review.find(departmentFilter(department, {
+    $or: [{ source: { $ne: 'google' } }, { lastGoogleSyncAt: { $gte: cutoff } }]
+  })).sort({ reviewDate: -1, createdAt: -1 }).limit(300).lean());
+}));
+adminApi.post('/reviews', asyncHandler(async (req, res) => {
+  const patientName = validateRequired(req.body.patientName, 'Patient name', 120);
+  const quote = validateRequired(req.body.quote, 'Review', 2000);
+  res.status(201).json(await Review.create({
+    department: getDepartment(req.query.department),
+    source: 'manual',
+    patientName,
+    quote,
+    treatmentLabel: safeText(req.body.treatmentLabel, 120),
+    rating: Math.max(1, Math.min(5, Number(req.body.rating || 5))),
+    ownerReply: safeText(req.body.ownerReply, 2000),
+    ownerReplyDate: safeText(req.body.ownerReply, 2000) ? new Date() : null,
+    published: req.body.published !== false,
+    sortOrder: Number(req.body.sortOrder || 0)
+  }));
+}));
+adminApi.patch('/reviews/:id', asyncHandler(async (req, res) => {
+  if (!isObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid review.' });
+  const filter = departmentFilter(getDepartment(req.query.department), { _id: req.params.id });
+  const existing = await Review.findOne(filter);
+  if (!existing) return res.status(404).json({ error: 'Review not found.' });
+  if (existing.source === 'google') {
+    const allowed = Object.keys(req.body || {}).every(key => key === 'published');
+    if (!allowed) return res.status(400).json({ error: 'Google reviews are imported from Google and cannot be edited here. You can hide or show them on the website.' });
+    existing.published = Boolean(req.body.published);
+    await existing.save();
+    return res.json(existing.toObject());
+  }
+  const update = {};
+  for (const key of ['patientName', 'quote', 'treatmentLabel']) if (req.body[key] !== undefined) update[key] = safeText(req.body[key], key === 'quote' ? 2000 : 120);
+  if (req.body.ownerReply !== undefined) {
+    update.ownerReply = safeText(req.body.ownerReply, 2000);
+    update.ownerReplyDate = update.ownerReply ? new Date() : null;
+  }
+  if (req.body.rating !== undefined) update.rating = Math.max(1, Math.min(5, Number(req.body.rating)));
+  if (req.body.published !== undefined) update.published = Boolean(req.body.published);
+  if (req.body.sortOrder !== undefined) update.sortOrder = Number(req.body.sortOrder || 0);
+  const row = await Review.findOneAndUpdate(filter, update, { new: true, runValidators: true });
+  res.json(row);
+}));
+adminApi.delete('/reviews/:id', asyncHandler(async (req, res) => {
+  const filter = departmentFilter(getDepartment(req.query.department), { _id: req.params.id });
+  const existing = await Review.findOne(filter);
+  if (!existing) return res.status(404).json({ error: 'Review not found.' });
+  if (existing.source === 'google') return res.status(400).json({ error: 'Google reviews are synced from the Business Profile and cannot be deleted here. Hide the review instead.' });
+  await existing.deleteOne();
+  res.json({ ok: true });
+}));
 
 adminApi.patch('/settings', asyncHandler(async (req, res) => {
   const allowed = ['clinicName', 'shortName', 'tagline', 'heroTitle', 'heroDescription', 'heroImage', 'phone', 'whatsapp', 'email', 'address', 'city', 'openingTime', 'closingTime', 'slotMinutes', 'workingDays', 'hoursLabel', 'mapUrl', 'instagram', 'facebook', 'aboutTitle', 'aboutDescription', 'googleReviewUrl', 'whatsappTemplateFirstVisit', 'whatsappTemplateFollowUp1', 'whatsappTemplateFollowUp2', 'whatsappTemplateFinalVisit', 'whatsappTemplateCompleted', 'servicesHeading', 'servicesDescription', 'galleryHeading', 'galleryDescription', 'faqHeading', 'faqDescription', 'careStep1Title', 'careStep1Description', 'careStep2Title', 'careStep2Description', 'careStep3Title', 'careStep3Description'];
@@ -912,6 +1018,194 @@ adminApi.post('/media/url', asyncHandler(async (req, res) => {
 }));
 adminApi.patch('/media/:id', asyncHandler(async (req, res) => { if (!isObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid media item.' }); const row = await Media.findOne(departmentFilter(getDepartment(req.query.department), { _id: req.params.id })); if (!row) return res.status(404).json({ error: 'Media not found.' }); if (req.body.title !== undefined) row.title = validateRequired(req.body.title, 'Title', 180); if (req.body.description !== undefined) row.description = safeText(req.body.description, 600); if (req.body.featured !== undefined) row.featured = Boolean(req.body.featured); if (req.body.active !== undefined) row.active = Boolean(req.body.active); if (req.body.sortOrder !== undefined) row.sortOrder = Number(req.body.sortOrder || 0); await row.save(); res.json(mediaPublic(row)); }));
 adminApi.delete('/media/:id', asyncHandler(async (req, res) => { if (!isObjectId(req.params.id)) return res.status(400).json({ error: 'Invalid media item.' }); const row = await Media.findOneAndDelete(departmentFilter(getDepartment(req.query.department), { _id: req.params.id })); if (!row) return res.status(404).json({ error: 'Media not found.' }); if (row.fileId && gridFS) await gridFS.delete(row.fileId).catch(() => {}); res.json({ ok: true }); }));
+
+
+// Google Business Profile review integration. OAuth tokens remain encrypted in MongoDB;
+// no Google token or credential is ever returned to the browser.
+adminApi.get('/google-reviews/status', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  if (department === 'dental') await expireStaleGoogleReviewCache();
+  const connection = await GoogleBusinessConnection.findOne({ department }).lean();
+  const recentCutoff = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000);
+  const importedCount = await Review.countDocuments({
+    department, source: 'google', lastGoogleSyncAt: { $gte: recentCutoff }
+  });
+  res.json({
+    configured: Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_OAUTH_REDIRECT_URI && process.env.GOOGLE_TOKEN_ENCRYPTION_KEY),
+    connected: Boolean(connection?.refreshTokenEncrypted),
+    accountName: connection?.accountName || '',
+    accountTitle: connection?.accountTitle || '',
+    locationName: connection?.locationName || '',
+    locationTitle: connection?.locationTitle || '',
+    lastSyncedAt: connection?.lastSyncedAt || null,
+    averageRating: Number(connection?.averageRating || 0),
+    totalReviewCount: Number(connection?.totalReviewCount || importedCount),
+    importedCount,
+    lastSyncError: connection?.lastSyncError || ''
+  });
+}));
+
+adminApi.get('/google-reviews/connect', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  if (department !== 'dental') return res.status(400).json({ error: 'Google Business Profile reviews are currently configured for the Dental department only.' });
+  const redirectUri = process.env.GOOGLE_OAUTH_REDIRECT_URI;
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !redirectUri || !process.env.GOOGLE_TOKEN_ENCRYPTION_KEY) {
+    return res.status(503).json({ error: 'Configure GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_OAUTH_REDIRECT_URI and GOOGLE_TOKEN_ENCRYPTION_KEY in Vercel before connecting Google.' });
+  }
+  const state = jwt.sign({
+    purpose: 'google_business_profile_reviews',
+    department,
+    adminId: req.admin._id.toString()
+  }, JWT_SECRET, { expiresIn: '10m', issuer: 'aurelia-dental' });
+  return res.redirect(buildGoogleAuthorizationUrl(state, redirectUri));
+}));
+
+adminApi.get('/google-reviews/accounts', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  const connection = await GoogleBusinessConnection.findOne({ department });
+  if (!connection?.refreshTokenEncrypted) return res.status(409).json({ error: 'Connect the Google account first.' });
+  res.json({ accounts: await listGoogleAccounts(connection) });
+}));
+
+adminApi.get('/google-reviews/locations', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  const connection = await GoogleBusinessConnection.findOne({ department });
+  if (!connection?.refreshTokenEncrypted) return res.status(409).json({ error: 'Connect the Google account first.' });
+  const accountName = safeText(req.query.accountName, 160);
+  res.json({ locations: await listGoogleLocations(connection, accountName) });
+}));
+
+adminApi.post('/google-reviews/location', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  const accountName = safeText(req.body.accountName, 160);
+  const locationName = safeText(req.body.locationName, 180);
+  const accountTitle = safeText(req.body.accountTitle, 180);
+  const locationTitle = safeText(req.body.locationTitle, 180);
+  if (!/^accounts\/[A-Za-z0-9_-]+$/.test(accountName) || !/^locations\/[A-Za-z0-9_-]+$/.test(locationName)) {
+    return res.status(400).json({ error: 'Choose a valid Google account and verified location.' });
+  }
+  const connection = await GoogleBusinessConnection.findOne({ department });
+  if (!connection?.refreshTokenEncrypted) return res.status(409).json({ error: 'Connect the Google account first.' });
+  connection.accountName = accountName;
+  connection.accountTitle = accountTitle;
+  connection.locationName = locationName;
+  connection.locationTitle = locationTitle;
+  connection.lastSyncError = '';
+  await connection.save();
+  res.json({ ok: true, accountTitle, locationTitle });
+}));
+
+adminApi.post('/google-reviews/sync', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  if (department !== 'dental') return res.status(400).json({ error: 'Google Business Profile review sync is currently available for Dental only.' });
+  const connection = await GoogleBusinessConnection.findOne({ department: 'dental' });
+  if (!connection?.refreshTokenEncrypted) return res.status(409).json({ error: 'Connect the Google Business Profile first.' });
+  const settings = await getSettings('dental');
+  try {
+    const result = await syncGoogleReviews(connection, settings?.googleReviewUrl || '');
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    connection.lastSyncError = safeText(error.message, 1000);
+    await connection.save().catch(() => {});
+    throw error;
+  }
+}));
+
+adminApi.post('/google-reviews/disconnect', asyncHandler(async (req, res) => {
+  const department = getDepartment(req.query.department);
+  const connection = await GoogleBusinessConnection.findOne({ department });
+  let googleAuthorizationRevoked = false;
+  let revocationWarning = '';
+  if (connection?.refreshTokenEncrypted) {
+    try {
+      googleAuthorizationRevoked = await revokeGoogleAuthorization(connection);
+    } catch (error) {
+      // Always remove the local credential even if Google's revocation endpoint is temporarily unavailable.
+      revocationWarning = 'The website disconnected, but Google did not confirm token revocation. Remove this app from the Google Account third-party access page as a precaution.';
+      console.warn('[Google Business Profile] Token revocation failed:', error.message);
+    }
+  }
+  await GoogleBusinessConnection.findOneAndUpdate({ department }, {
+    $set: {
+      refreshTokenEncrypted: '',
+      accountName: '',
+      accountTitle: '',
+      locationName: '',
+      locationTitle: '',
+      connectedAt: null,
+      lastSyncedAt: null,
+      averageRating: 0,
+      totalReviewCount: 0,
+      lastSyncError: ''
+    }
+  });
+  // Imported Google review cache is retained only until the 28-day cache expiry.
+  res.json({ ok: true, googleAuthorizationRevoked, revocationWarning });
+}));
+
+app.get('/api/google-reviews/callback', asyncHandler(async (req, res) => {
+  const adminPath = '/admin?tab=google-reviews';
+  if (req.query.error) return res.redirect(`${adminPath}&google=denied`);
+  const code = safeText(req.query.code, 4000);
+  const state = safeText(req.query.state, 4000);
+  if (!code || !state) return res.redirect(`${adminPath}&google=invalid`);
+  let payload;
+  try {
+    payload = jwt.verify(state, JWT_SECRET, { issuer: 'aurelia-dental' });
+  } catch {
+    return res.redirect(`${adminPath}&google=invalid`);
+  }
+  if (payload.purpose !== 'google_business_profile_reviews' || payload.department !== 'dental' || !payload.adminId) {
+    return res.redirect(`${adminPath}&google=invalid`);
+  }
+  try {
+    const authorisingAdmin = await Admin.findById(payload.adminId).select('_id active').lean();
+    if (!authorisingAdmin?.active) return res.redirect(`${adminPath}&google=admin-expired`);
+    const tokenResponse = await exchangeGoogleAuthorizationCode(code, process.env.GOOGLE_OAUTH_REDIRECT_URI);
+    const existing = await GoogleBusinessConnection.findOne({ department: 'dental' });
+    const encryptedRefreshToken = tokenResponse.refresh_token
+      ? encryptGoogleRefreshToken(tokenResponse.refresh_token)
+      : existing?.refreshTokenEncrypted;
+    if (!encryptedRefreshToken) throw new Error('Google did not return an offline refresh token. Reconnect and approve access again.');
+    await GoogleBusinessConnection.findOneAndUpdate(
+      { department: 'dental' },
+      { $set: {
+        refreshTokenEncrypted: encryptedRefreshToken,
+        connectedBy: String(payload.adminId),
+        connectedAt: new Date(),
+        lastSyncError: ''
+      }, $setOnInsert: { department: 'dental' } },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    return res.redirect(`${adminPath}&google=connected`);
+  } catch (error) {
+    console.error('[Google Business Profile OAuth]', error.message);
+    return res.redirect(`${adminPath}&google=error`);
+  }
+}));
+
+app.get('/api/cron/google-reviews', asyncHandler(async (req, res) => {
+  const secret = process.env.CRON_SECRET;
+  if (!secret) return res.status(503).json({ error: 'CRON_SECRET is not configured.' });
+  if (req.headers.authorization !== `Bearer ${secret}`) return res.status(401).json({ error: 'Unauthorized cron request.' });
+  await expireStaleGoogleReviewCache();
+  const connection = await GoogleBusinessConnection.findOne({
+    department: 'dental',
+    refreshTokenEncrypted: { $ne: '' },
+    accountName: { $ne: '' },
+    locationName: { $ne: '' }
+  });
+  if (!connection) return res.json({ ok: true, skipped: true, reason: 'Google Business Profile is not connected to a location.' });
+  const settings = await getSettings('dental');
+  try {
+    const result = await syncGoogleReviews(connection, settings?.googleReviewUrl || '');
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    connection.lastSyncError = safeText(error.message, 1000);
+    await connection.save().catch(() => {});
+    throw error;
+  }
+}));
 
 app.use('/api/admin', adminApi);
 
@@ -997,7 +1291,7 @@ export async function ensureDatabase() {
         await mongoose.connect(uri, { serverSelectionTimeoutMS: 12000, connectTimeoutMS: 12000, maxPoolSize: 10, minPoolSize: 0, maxIdleTimeMS: 45_000, family: 4, autoIndex: process.env.NODE_ENV !== 'production' });
       }
       await mongoose.connection.db.admin().command({ ping: 1 });
-      await Promise.all([Doctor, Treatment, Appointment, Branch, Patient, WhatsAppLog, Media, Faq, Review, ClinicSettings, Admin].map(model => model.createIndexes()));
+      await Promise.all([Doctor, Treatment, Appointment, Branch, Patient, WhatsAppLog, Media, Faq, Review, GoogleBusinessConnection, ClinicSettings, Admin].map(model => model.createIndexes()));
       gridFS = new GridFSBucket(mongoose.connection.db, { bucketName: 'aureliaMedia' });
       await seedDatabaseOnce();
       await migrateExistingAppointmentsToPatients();

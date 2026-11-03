@@ -18,5 +18,11 @@
       "source": "/:path((?!api/).*)",
       "destination": "/index.html"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/google-reviews",
+      "schedule": "0 19 * * *"
+    }
   ]
 }
