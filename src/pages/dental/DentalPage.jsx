@@ -13,6 +13,11 @@ import { useClinicData } from '../../hooks/useClinicData';
 import { DEFAULT_SETTINGS, DEFAULT_FAQS, FALLBACK_SERVICES, FALLBACK_DOCTORS } from '../../data/clinicDefaults';
 import { Wordmark, Reveal, ImageWithFallback, SectionEyebrow, SectionHeading, WhatsAppLink } from '../../components/clinic/ClinicComponents';
 import { GoogleReviewsSection } from '../../components/clinic/GoogleReviewsSection';
+import '../../components/clinic/clinic-location.css';
+
+// The destination below is the Google Maps location supplied for R Dental Clinic.
+const CLINIC_MAPS_URL = 'https://www.google.com/maps?gs_lcrp=EgZjaHJvbWUqBggAEEUYOzIGCAAQRRg7MgYIARBFGDkyBggCEEUYOzIGCAMQRRg7MgYIBBBFGDwyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQkxODMxajBqMTWoAgiwAgHxBf05-9jfiB548QX9OfvY34geeA&um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KceRGr9vvec7MRlmhH_lbJRi&daddr=Nagaon+Rd,+Nagaon,+Gulzar+Nagar,+Bhiwandi,+Maharashtra+421302';
+const CLINIC_MAP_EMBED_URL = 'https://www.google.com/maps?q=Nagaon%20Rd%2C%20Nagaon%2C%20Gulzar%20Nagar%2C%20Bhiwandi%2C%20Maharashtra%20421302&output=embed';
 
 export function PublicSite() {
   const { settings, services, doctors, branches, media, faqs, reviews, apiDown } = useClinicData();
@@ -32,7 +37,18 @@ export function PublicSite() {
     setBookService(serviceId || ''); setBookDoctor(doctorId || ''); setBookBranch(branchId || ''); document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false);
   };
   return <div className="site-shell" id="top">
-    <div className="topline"><span><Sparkles size={13}/> A calmer kind of dental care</span><span className="topline-right"><Clock3 size={13}/>{settings.hoursLabel || DEFAULT_SETTINGS.hoursLabel}<span className="topline-divider"/> <a href={`tel:${settings.phone}`}>Call {settings.phone}</a></span></div>
+    <div className="topline">
+      <span className="topline-intro"><Sparkles size={13}/> A calmer kind of dental care</span>
+      <span className="topline-right">
+        <span className="topline-hours"><Clock3 size={13}/>{settings.hoursLabel || DEFAULT_SETTINGS.hoursLabel}</span>
+        <span className="topline-divider" aria-hidden="true"/>
+        <a className="topline-location" href={CLINIC_MAPS_URL} target="_blank" rel="noopener noreferrer" aria-label="Open R Dental Clinic location in Google Maps">
+          <MapPin size={13}/> Our Location
+        </a>
+        <span className="topline-divider" aria-hidden="true"/>
+        <a href={`tel:${settings.phone}`}>Call {settings.phone}</a>
+      </span>
+    </div>
     <header className="site-header">
       <div className="container header-inner"><Wordmark settings={settings}/>
         <nav className={`main-nav ${menuOpen ? 'main-nav-open' : ''}`}>
@@ -96,7 +112,31 @@ export function PublicSite() {
       <section className="last-call-section"><div className="container last-call-content"><span className="last-call-symbol"><Smile size={31}/></span><div><SectionEyebrow>WHEN YOU FEEL READY</SectionEyebrow><h2>Your smile deserves<br/><em>thoughtful care.</em></h2></div><button className="button button-dark button-lg" onClick={() => goBook()}>Book your first visit <ArrowUpRight size={18}/></button></div></section>
     </main>
 
-    <footer className="site-footer"><div className="container footer-main"><div className="footer-brand"><Wordmark settings={settings} light/><p>Modern dentistry, thoughtful people, and a calmer experience — from your first hello to your healthiest smile.</p><div className="footer-socials"><WhatsAppLink settings={settings} className="social-round" message="Hello, I would like to contact the clinic."><MessageCircle size={17}/></WhatsAppLink>{settings.instagram && <a href={settings.instagram} target="_blank" rel="noreferrer" className="social-round"><Instagram size={17}/></a>}</div></div><div className="footer-col"><span className="footer-col-title">EXPLORE</span><a href="#treatments">Treatments</a><a href="#approach">Our approach</a><a href="#team">The team</a><a href="#studio">The studio</a><a href="#faq">FAQs</a></div><div className="footer-col"><span className="footer-col-title">GET IN TOUCH</span><a href={`tel:${settings.phone}`}>{settings.phone}</a><a href={`mailto:${settings.email}`}>{settings.email}</a><span>{settings.address}</span><span>{settings.city}</span></div><div className="footer-col footer-hours"><span className="footer-col-title">OPENING HOURS</span><p>{settings.hoursLabel || DEFAULT_SETTINGS.hoursLabel}</p><span>Appointments are recommended.</span><button className="button button-light footer-book" onClick={() => { document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' }); }}>Request a visit <ArrowUpRight size={15}/></button></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} {settings.clinicName}. All rights reserved.</span><span>Thoughtful care, thoughtfully delivered.</span><a href="/admin">Admin sign in <ArrowUpRight size={13}/></a></div></footer>
+    <footer className="site-footer">
+      <div className="container footer-main">
+        <div className="footer-brand"><Wordmark settings={settings} light/><p>Modern dentistry, thoughtful people, and a calmer experience — from your first hello to your healthiest smile.</p><div className="footer-socials"><WhatsAppLink settings={settings} className="social-round" message="Hello, I would like to contact the clinic."><MessageCircle size={17}/></WhatsAppLink>{settings.instagram && <a href={settings.instagram} target="_blank" rel="noreferrer" className="social-round"><Instagram size={17}/></a>}</div></div>
+        <div className="footer-col"><span className="footer-col-title">EXPLORE</span><a href="#treatments">Treatments</a><a href="#approach">Our approach</a><a href="#team">The team</a><a href="#studio">The studio</a><a href="#faq">FAQs</a></div>
+        <div className="footer-col"><span className="footer-col-title">GET IN TOUCH</span><a href={`tel:${settings.phone}`}>{settings.phone}</a><a href={`mailto:${settings.email}`}>{settings.email}</a><span>{settings.address}</span><span>{settings.city}</span><a className="footer-address-link" href={CLINIC_MAPS_URL} target="_blank" rel="noopener noreferrer"><MapPin size={13}/> View clinic location</a></div>
+        <div className="footer-col footer-hours"><span className="footer-col-title">OPENING HOURS</span><p>{settings.hoursLabel || DEFAULT_SETTINGS.hoursLabel}</p><span>Appointments are recommended.</span><button className="button button-light footer-book" onClick={() => { document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' }); }}>Request a visit <ArrowUpRight size={15}/></button></div>
+      </div>
+
+      <div className="container footer-map-section">
+        <div className="footer-map-copy">
+          <span className="footer-col-title">FIND OUR CLINIC</span>
+          <div className="footer-map-heading"><MapPin size={21}/><h3>Visit R Dental Clinic</h3></div>
+          <p>Nagaon Road, Nagaon, Gulzar Nagar, Bhiwandi, Maharashtra 421302</p>
+          <a className="footer-map-directions" href={CLINIC_MAPS_URL} target="_blank" rel="noopener noreferrer">Get directions on Google Maps <ArrowUpRight size={15}/></a>
+        </div>
+        <div className="footer-map-preview">
+          <iframe src={CLINIC_MAP_EMBED_URL} title="R Dental Clinic location map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen/>
+          <a className="footer-map-hitarea" href={CLINIC_MAPS_URL} target="_blank" rel="noopener noreferrer" aria-label="Open directions to R Dental Clinic in Google Maps">
+            <span><MapPin size={14}/> Open in Google Maps <ArrowUpRight size={13}/></span>
+          </a>
+        </div>
+      </div>
+
+      <div className="container footer-bottom"><span>© {new Date().getFullYear()} {settings.clinicName}. All rights reserved.</span><span>Thoughtful care, thoughtfully delivered.</span><a href="/admin">Admin sign in <ArrowUpRight size={13}/></a></div>
+    </footer>
 
     <WhatsAppLink settings={settings} className="floating-whatsapp" message="Hello, I would like to know more about your dental services."><MessageCircle size={21}/><span>Chat with us</span></WhatsAppLink>
     <AnimatePresence>{lightbox && <motion.div className="lightbox" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setLightbox(null)}><button className="lightbox-close" onClick={() => setLightbox(null)}><X/></button><div className="lightbox-content" onClick={e => e.stopPropagation()}>{lightbox.type === 'video' ? <VideoViewer item={lightbox}/> : <ImageWithFallback src={lightbox.url} alt={lightbox.title} className="lightbox-image"/>}<h3>{lightbox.title}</h3><p>{lightbox.description}</p></div></motion.div>}</AnimatePresence>

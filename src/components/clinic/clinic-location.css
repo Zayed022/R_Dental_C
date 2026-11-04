@@ -1,0 +1,264 @@
+/* R Dental Clinic location links and footer map. Imported only by DentalPage.jsx. */
+.topline-right {
+    white-space: nowrap;
+  }
+  
+  .topline-hours,
+  .topline-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .topline-location {
+    color: #fff;
+    font-weight: 700;
+    transition: opacity 180ms ease, color 180ms ease;
+  }
+  
+  .topline-location:hover {
+    color: #83e2e4;
+    opacity: 0.95;
+  }
+  
+  .topline-location:focus-visible,
+  .footer-address-link:focus-visible,
+  .footer-map-directions:focus-visible,
+  .footer-map-hitarea:focus-visible {
+    outline: 2px solid #74d9df;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  
+  .footer-address-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #d9eff0;
+    font-weight: 700;
+    transition: color 180ms ease;
+  }
+  
+  .footer-address-link svg {
+    color: #74d9df;
+    flex: 0 0 auto;
+  }
+  
+  .footer-address-link:hover {
+    color: #83e2e4;
+  }
+  
+  .footer-map-section {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr);
+    align-items: stretch;
+    gap: clamp(24px, 4vw, 58px);
+    padding-top: 27px;
+    padding-bottom: 34px;
+    border-top: 1px solid rgba(232, 238, 246, 0.14);
+  }
+  
+  .footer-map-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+  }
+  
+  .footer-map-copy .footer-col-title {
+    color: #76d9df;
+    margin: 0 0 15px;
+  }
+  
+  .footer-map-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .footer-map-heading > svg {
+    flex: 0 0 auto;
+    color: #77dce0;
+  }
+  
+  .footer-map-heading h3 {
+    margin: 0;
+    color: #f2f7fa;
+    font-family: inherit;
+    font-size: clamp(16px, 1.4vw, 20px);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+  
+  .footer-map-copy p {
+    max-width: 340px;
+    margin: 12px 0 17px;
+    color: #bdcbd6;
+    font-size: 11px;
+    line-height: 1.75;
+  }
+  
+  .footer-map-directions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 39px;
+    padding: 0 14px;
+    border-radius: 6px;
+    background: #e6f4f3;
+    color: #203a48;
+    font-size: 10px;
+    font-weight: 750;
+    transition: transform 180ms ease, background 180ms ease;
+  }
+  
+  .footer-map-directions:hover {
+    transform: translateY(-2px);
+    background: #c9eceb;
+  }
+  
+  .footer-map-preview {
+    position: relative;
+    min-width: 0;
+    min-height: 178px;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(223, 238, 244, 0.23);
+    border-radius: 10px;
+    background: #dce6e9;
+    box-shadow: 0 14px 35px rgba(5, 17, 28, 0.18);
+  }
+  
+  .footer-map-preview iframe {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+  }
+  
+  .footer-map-hitarea {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 12px;
+    background: linear-gradient(180deg, transparent 48%, rgba(13, 31, 43, 0.3) 100%);
+  }
+  
+  .footer-map-hitarea > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    background: rgba(26, 49, 65, 0.92);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 750;
+    box-shadow: 0 5px 18px rgba(12, 27, 39, 0.22);
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  
+  .footer-map-hitarea:hover > span {
+    transform: translateY(-2px);
+    background: #1f8890;
+  }
+  
+  @media (max-width: 860px) {
+    .topline {
+      gap: 16px;
+    }
+  
+    .topline-right {
+      gap: 7px !important;
+      font-size: 9px;
+    }
+  
+    .topline-hours,
+    .topline-location {
+      gap: 5px;
+    }
+  
+    .footer-map-section {
+      grid-template-columns: minmax(190px, 0.8fr) minmax(0, 1.2fr);
+      gap: 22px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .topline {
+      height: auto;
+      min-height: 47px;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
+    }
+  
+    .topline-intro {
+      font-size: 8px;
+      line-height: 1.2;
+    }
+  
+    .topline-right {
+      width: 100%;
+      justify-content: flex-end;
+      gap: 13px !important;
+      font-size: 8px;
+    }
+  
+    .topline-hours,
+    .topline-divider {
+      display: none !important;
+    }
+  
+    .topline-location {
+      font-size: 8px;
+    }
+  
+    .topline-location svg {
+      width: 12px;
+      height: 12px;
+    }
+  
+    .footer-map-section {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      padding-top: 23px;
+      padding-bottom: 26px;
+    }
+  
+    .footer-map-copy p {
+      max-width: 420px;
+      margin-top: 9px;
+    }
+  
+    .footer-map-preview {
+      min-height: 185px;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .topline-location,
+    .footer-address-link,
+    .footer-map-directions,
+    .footer-map-hitarea > span {
+      transition: none;
+    }
+  
+    .footer-map-directions:hover,
+    .footer-map-hitarea:hover > span {
+      transform: none;
+    }
+  }
+  
