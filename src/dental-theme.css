@@ -3,7 +3,7 @@
  * Scope: the public Dental experience only (.site-shell).
  * Skin & Hair styling is intentionally untouched in skin.css.
  */
-.site-shell {
+ .site-shell {
   --ink: #1e2e3e;
   --ink-2: #344b5b;
   --muted: #71838d;
@@ -447,5 +447,163 @@
     background: #eaf6f5;
     border-color: #9acdcc;
     color: #245c68;
+  }
+}
+
+/* Keep the clinic utility information on a single horizontal row at every viewport width. */
+.site-shell .topline {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(8px, 1.5vw, 18px);
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.site-shell .topline::-webkit-scrollbar {
+  display: none;
+}
+
+.site-shell .topline > .topline-intro,
+.site-shell .topline > .topline-right {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.site-shell .topline > .topline-right {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-shell .topline > .topline-right > *,
+.site-shell .topline .topline-hours {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .site-shell .topline {
+    height: 31px;
+    min-height: 31px;
+    padding-inline: 10px;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .site-shell .topline > .topline-intro {
+    gap: 4px;
+    font-size: 7px;
+    letter-spacing: 0.045em;
+  }
+
+  .site-shell .topline > .topline-intro svg {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 10px;
+  }
+
+  .site-shell .topline > .topline-right {
+    gap: 7px !important;
+    font-size: 7px;
+    letter-spacing: 0.035em;
+  }
+
+  .site-shell .topline .topline-hours {
+    gap: 3px;
+  }
+
+  .site-shell .topline .topline-hours svg {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+  }
+}
+
+/* Final mobile utility-bar fix: keep tagline, hours and phone on one row. */
+@media (max-width: 600px) {
+  .site-shell .topline {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100%;
+    min-width: 0;
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 7px !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none;
+  }
+  .site-shell .topline::-webkit-scrollbar { display: none; }
+  .site-shell .topline > .topline-intro {
+    display: inline-flex !important;
+    flex: 0 1 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    min-width: 0;
+    gap: 3px !important;
+    font-size: clamp(5px, 1.25vw, 6.5px) !important;
+    line-height: 1 !important;
+    letter-spacing: 0.015em !important;
+    white-space: nowrap !important;
+  }
+  .site-shell .topline > .topline-intro svg {
+    display: block !important;
+    flex: 0 0 8px !important;
+    width: 8px !important;
+    height: 8px !important;
+  }
+  .site-shell .topline > .topline-right {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    min-width: 0;
+    gap: 5px !important;
+    font-size: clamp(5px, 1.2vw, 6.25px) !important;
+    line-height: 1 !important;
+    letter-spacing: 0.01em !important;
+    white-space: nowrap !important;
+  }
+  .site-shell .topline .topline-hours {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 2px !important;
+    white-space: nowrap !important;
+  }
+  .site-shell .topline .topline-hours svg {
+    display: block !important;
+    flex: 0 0 7px !important;
+    width: 7px !important;
+    height: 7px !important;
+  }
+  .site-shell .topline .topline-divider {
+    display: block !important;
+    flex: 0 0 1px !important;
+    height: 9px !important;
+    margin-left: 5px;
+    margin: 0 3px !important;
+    
+   
+  }
+  .site-shell .topline > .topline-right > a {
+    display: inline-block !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
   }
 }

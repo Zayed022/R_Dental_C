@@ -1,0 +1,252 @@
+.reviews-standalone-page {
+    min-height: 100vh;
+    color: #20394c;
+    background: #f5f9fb;
+  }
+  
+  .reviews-standalone-header {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 82px;
+    padding: 12px clamp(20px, 5vw, 76px);
+    background: rgba(255, 255, 255, .96);
+    border-bottom: 1px solid #dce8ee;
+  }
+  
+  .reviews-standalone-brand,
+  .reviews-standalone-header-actions,
+  .reviews-standalone-phone,
+  .reviews-standalone-home-link,
+  .reviews-standalone-footer-link {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .reviews-standalone-brand {
+    gap: 12px;
+    color: #20394c;
+    text-decoration: none;
+  }
+  
+  .reviews-standalone-brand img {
+    display: block;
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+  
+  .reviews-standalone-brand span {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .reviews-standalone-brand strong {
+    font-family: var(--serif, Georgia, serif);
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 600;
+  }
+  
+  .reviews-standalone-brand small {
+    color: #6b8795;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .18em;
+  }
+  
+  .reviews-standalone-header-actions {
+    justify-content: flex-end;
+    gap: 22px;
+  }
+  
+  .reviews-standalone-phone {
+    gap: 7px;
+    color: #526d7d;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .reviews-standalone-phone svg { color: #27889a; }
+  
+  .reviews-standalone-home-link {
+    gap: 8px;
+    padding: 11px 15px;
+    color: #fff;
+    background: #1e3345;
+    border: 1px solid #1e3345;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+  }
+  
+  .reviews-standalone-home-link:hover {
+    background: #2a8297;
+    border-color: #2a8297;
+    transform: translateY(-1px);
+  }
+  
+  .reviews-standalone-main {
+    width: min(100% - 40px, 1460px);
+    margin: 0 auto;
+    padding: 48px 0 30px;
+  }
+  
+  .reviews-standalone-kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #287f91;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .2em;
+  }
+  
+  .reviews-standalone-kicker-line {
+    width: 26px;
+    height: 1px;
+    background: #2a8297;
+  }
+  
+  .reviews-standalone-title-row {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 13px 0 0;
+  }
+  
+  .reviews-standalone-title-row h1 {
+    margin: 0;
+    color: #1d3548;
+    font-family: var(--serif, Georgia, serif);
+    font-size: clamp(34px, 4.3vw, 58px);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.1;
+  }
+  
+  .reviews-standalone-title-row p {
+    max-width: 660px;
+    margin: 12px 0 0;
+    color: #6b8190;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  
+  .reviews-standalone-hours {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    flex: 0 0 auto;
+    padding: 13px 16px;
+    color: #476274;
+    background: #fff;
+    border: 1px solid #dce8ee;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  
+  .reviews-standalone-hours svg { color: #27889a; }
+  
+  /* The shared review section is intentionally retained; only its page spacing is tuned. */
+  .reviews-standalone-main > .google-reviews-section {
+    margin: 10px calc((min(100vw - 40px, 1460px) - 100vw) / 2) 0;
+    padding-top: 42px;
+    padding-bottom: 54px;
+    background: transparent;
+  }
+  
+  .reviews-standalone-main > .google-reviews-section > .container {
+    width: min(100% - 40px, 1460px);
+  }
+  
+  .reviews-standalone-notice {
+    margin: 22px 0 0;
+    padding: 12px 16px;
+    color: #7b5b21;
+    background: #fff8e9;
+    border: 1px solid #f0dfb9;
+    font-size: 12px;
+  }
+  
+  .reviews-standalone-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 260px;
+    color: #6b8190;
+    font-size: 13px;
+  }
+  
+  .reviews-standalone-spinner {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #d7e6ec;
+    border-top-color: #27889a;
+    border-radius: 50%;
+    animation: reviews-standalone-spin .75s linear infinite;
+  }
+  
+  @keyframes reviews-standalone-spin { to { transform: rotate(360deg); } }
+  
+  .reviews-standalone-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px clamp(20px, 5vw, 76px);
+    color: #aec0ca;
+    background: #1e3040;
+    font-size: 10px;
+  }
+  
+  .reviews-standalone-footer-brand {
+    color: #fff;
+    font-family: var(--serif, Georgia, serif);
+    font-size: 17px;
+    text-decoration: none;
+  }
+  
+  .reviews-standalone-footer-link {
+    gap: 6px;
+    color: #dff2f4;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  
+  @media (max-width: 760px) {
+    .reviews-standalone-header { min-height: 70px; padding: 10px 16px; }
+    .reviews-standalone-brand img { width: 40px; height: 40px; }
+    .reviews-standalone-brand strong { font-size: 17px; }
+    .reviews-standalone-brand small { font-size: 7px; }
+    .reviews-standalone-header-actions { gap: 12px; }
+    .reviews-standalone-phone { font-size: 10px; }
+    .reviews-standalone-phone svg { width: 13px; height: 13px; }
+    .reviews-standalone-home-link { padding: 10px 11px; font-size: 10px; }
+    .reviews-standalone-main { width: min(100% - 28px, 680px); padding-top: 34px; }
+    .reviews-standalone-title-row { align-items: flex-start; flex-direction: column; gap: 14px; }
+    .reviews-standalone-hours { padding: 10px 12px; }
+    .reviews-standalone-main > .google-reviews-section { margin: 0 -14px; padding-top: 32px; }
+    .reviews-standalone-main > .google-reviews-section > .container { width: calc(100% - 28px); }
+    .reviews-standalone-footer { flex-wrap: wrap; gap: 10px 18px; padding: 18px 16px; }
+  }
+  
+  @media (max-width: 420px) {
+    .reviews-standalone-phone span { display: none; }
+    .reviews-standalone-home-link span { display: none; }
+    .reviews-standalone-home-link { width: 38px; height: 38px; justify-content: center; padding: 0; }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .reviews-standalone-home-link { transition: none; }
+    .reviews-standalone-spinner { animation-duration: 1.8s; }
+  }
+  

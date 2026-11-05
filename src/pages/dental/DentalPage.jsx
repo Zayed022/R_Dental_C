@@ -38,13 +38,9 @@ export function PublicSite() {
   };
   return <div className="site-shell" id="top">
     <div className="topline">
-      <span className="topline-intro"><Sparkles size={13}/> A calmer kind of dental care</span>
+    <span className="topline-intro"><Sparkles size={13}/> A calmer kind of dental care</span>
       <span className="topline-right">
         <span className="topline-hours"><Clock3 size={13}/>{settings.hoursLabel || DEFAULT_SETTINGS.hoursLabel}</span>
-        <span className="topline-divider" aria-hidden="true"/>
-        <a className="topline-location" href={CLINIC_MAPS_URL} target="_blank" rel="noopener noreferrer" aria-label="Open R Dental Clinic location in Google Maps">
-          <MapPin size={13}/> Our Location
-        </a>
         <span className="topline-divider" aria-hidden="true"/>
         <a href={`tel:${settings.phone}`}>Call {settings.phone}</a>
       </span>
